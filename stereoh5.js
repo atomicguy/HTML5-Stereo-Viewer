@@ -1,7 +1,7 @@
-/*
+/*!
 HTML5 Stereo Viewer
 
-Version 1.5
+Version 2.0.0-dev
 
 Copyright (C) 2013 Yury Golubinsky, Bill Bryant
 
@@ -11,7 +11,7 @@ To view a copy of this license,
 visit http://creativecommons.org/licenses/by/3.0/
 */
 
-var stereover = "1.5",
+var stereover = "2.0.0-dev",
     images = [],
     imagesT = [],
     imagesC = [],
