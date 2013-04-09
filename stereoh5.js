@@ -64,8 +64,8 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
         stereoSwap = Swap;
     }
 
-    stereoiOS_iPhone = (navigator.appVersion.indexOf("iPhone") != -1) || (navigator.appVersion.indexOf("iPod") != -1);
-    stereoiOS_iPad = (navigator.appVersion.indexOf("iPad") != -1);
+    stereoiOS_iPhone = (navigator.appVersion.indexOf("iPhone") !== -1) || (navigator.appVersion.indexOf("iPod") !== -1);
+    stereoiOS_iPad = (navigator.appVersion.indexOf("iPad") !== -1);
     stereoiOS = stereoiOS_iPad || stereoiOS_iPhone;
     if (stereoiOS) {
         stereoNav = 0;
@@ -226,7 +226,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     document.getElementById("stereoViewer").style.right = 0;
     //document.getElementById("stereoViewer").style.visibility = "visible";
 
-    document.getElementById("stereoNav").checked = stereoNav != 0;
+    document.getElementById("stereoNav").checked = stereoNav !== 0;
 
     stereoCheckCookie();
     var sm = stereoGetCookie();
@@ -237,10 +237,10 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     }
 
     for (var i = 0; i <= stereoModes; i++)
-        document.getElementById("modeselect").options[i].selected = stereoMode == i;
+        document.getElementById("modeselect").options[i].selected = stereoMode === i;
 
     for (var i = 0; i < document.getElementById("stereoGlasses").options.length; i++)
-        document.getElementById("stereoGlasses").options[i].selected = stereoGlasses == i;
+        document.getElementById("stereoGlasses").options[i].selected = stereoGlasses === i;
 
     stereoCorrectAfterMode();
 
@@ -253,7 +253,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
         meta.content = "width = device-width; initial-scale = 1.0; user-scalable = no; maximum-scale=1.0; minimum-scale=1.0; target-densityDpi=device-dpi;";
         var b = false;
         for (var i = 0; i < document.getElementsByTagName("head")[0].childNodes.length; i++)
-            if (document.getElementsByTagName("head")[0].childNodes[i].name == "viewport") {
+            if (document.getElementsByTagName("head")[0].childNodes[i].name === "viewport") {
                 document.getElementsByTagName("head")[0].replaceChild(meta, document.getElementsByTagName("head")[0].childNodes[i]);
                 b = true;
                 break;
@@ -281,7 +281,7 @@ function stereoViewerClose() {
         meta.name = "viewport";
         meta.content = "width = device-width; initial-scale = 1.0; user-scalable = yes;";
         for (var i = 0; i < document.getElementsByTagName("head")[0].childNodes.length; i++)
-            if (document.getElementsByTagName("head")[0].childNodes[i].name == "viewport") {
+            if (document.getElementsByTagName("head")[0].childNodes[i].name === "viewport") {
                 document.getElementsByTagName("head")[0].replaceChild(meta, document.getElementsByTagName("head")[0].childNodes[i]);
                 break;
             }
@@ -358,7 +358,7 @@ function stereoViewerOptionsOpen(value) {
 
 function stereoHelpOpen(value) {
     var s;
-    if (document.getElementById("stereoHelp").style.visibility == "hidden")
+    if (document.getElementById("stereoHelp").style.visibility === "hidden")
         s = "visible"
     else
         s = "hidden";
@@ -368,7 +368,7 @@ function stereoHelpOpen(value) {
 
 function stereoAboutOpen(value) {
     var s;
-    if (document.getElementById("stereoAbout").style.visibility == "hidden")
+    if (document.getElementById("stereoAbout").style.visibility === "hidden")
         s = "visible"
     else
         s = "hidden";
@@ -447,20 +447,20 @@ function stereoDrawControls(event) {
         }
 
         if ((mx >= 0) && (mx < stereoNav) && (my >= 0) && (my < cnvs.height)) {  //left
-            if (stereoMouse != 0) {
+            if (stereoMouse !== 0) {
                 _draw(color1, color2, color11, color22);
                 stereoMouse = 0;
             }
         }
         else
         if ((mx >= cnvs.width - stereoNav) && (mx < cnvs.width) && (my >= 0) && (my < cnvs.height)) {     //right
-            if (stereoMouse != 2) {
+            if (stereoMouse !== 2) {
                 _draw(color2, color1, color22, color11);
                 stereoMouse = 2;
             }
         }
         else
-        if (stereoMouse != 1) {
+        if (stereoMouse !== 1) {
             _draw(color2, color2, color22, color22);
             stereoMouse = 1;
         }
@@ -532,14 +532,14 @@ function stereoDrawImage() {
         cnvswidth = document.getElementById("stereoViewer").clientWidth,
         elmnt = document.getElementById("stereoCanvasdiv");
 
-    //if (elmnt.height != cnvsheight)
+    //if (elmnt.height !== cnvsheight)
         elmnt.height = cnvsheight;
-    //if (elmnt.width != cnvswidth)
+    //if (elmnt.width !== cnvswidth)
         elmnt.width = cnvswidth;
     elmnt = document.getElementById("stereoCanvas");
-    //if (elmnt.height != cnvsheight)
+    //if (elmnt.height !== cnvsheight)
         elmnt.height = cnvsheight;
-    //if (width != cnvswidth)
+    //if (width !== cnvswidth)
         elmnt.width = cnvswidth;
 
     ///////////////////////////////////
@@ -579,23 +579,23 @@ function stereoDrawImage() {
             if (!inter)
                 imageData = ctx.createImageData(imw, imh)
             else
-                if (stereoMode_ == 10)
+                if (stereoMode_ === 10)
                     imageData = ctx.createImageData(imw, imh * 2)
                 else
                     imageData = ctx.createImageData(imw * 2, imh);
 
-            if (imagesT[imageN] == "stereoLR")
+            if (imagesT[imageN] === "stereoLR")
                 stereoSwap_ = !stereoSwap_;
 
             var ssw = stereoSwap_;
             if (inter) {
                 switch (stereoMode_) {
                     case 10:
-                        if (((cnvsheight - mc - imh * 2) / 2) % 2 == 0)
+                        if (((cnvsheight - mc - imh * 2) / 2) % 2 === 0)
                             ssw = !ssw;
                         break;
                     case 11:
-                        if (((cnvswidth - imw * 2) / 2) % 2 == 0)
+                        if (((cnvswidth - imw * 2) / 2) % 2 === 0)
                             ssw = !ssw;
                         break;
                 }
@@ -613,6 +613,7 @@ function stereoDrawImage() {
 
         function _getLines(phrase, maxPxLength) {
             var phraseArray = [];
+            // TODO: simple truthy check?
             if (phrase != null) {
                 var wa = phrase.split(" "),
                     lastPhrase = "",
@@ -653,7 +654,7 @@ function stereoDrawImage() {
                         ctx.fillStyle = "rgba(128, 128, 128, 1)";
                 }
                 var h = ctx.measureText("Wg").width;
-                if (num == 1) {
+                if (num === 1) {
                     var s = _getLines(imagesC[imageN], cnvswidth - 36);
                     for (var i = 0; i < s.length; i++)
                         ctx.fillText(s[i], cnvswidth / 2, cnvsheight / 2 + imh / 2 + i * h)
@@ -735,7 +736,7 @@ function stereoDrawImage() {
                     stereoSwap_ = !stereoSwap_;
                 case 0: //LR
                     prepareWH();
-                    if (imagesT[imageN] == "stereoLR")
+                    if (imagesT[imageN] === "stereoLR")
                         stereoSwap_ = !stereoSwap_;
                     if (!stereoSwap_)
                         ctx.drawImage(img, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imh)
@@ -745,7 +746,7 @@ function stereoDrawImage() {
                         ctx.drawImage(img, img.width / 2, 0, img.width / 2, img.height,
                                             (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh)
                     }
-                    if ((imagesT[imageN] == "flat") || (imagesT[imageN] == "anaglyph"))
+                    if ((imagesT[imageN] === "flat") || (imagesT[imageN] === "anaglyph"))
                         _drawText(1)
                     else
                         _drawText(2);
@@ -753,7 +754,7 @@ function stereoDrawImage() {
 
                 case 3: //only Left
                     prepareWH2();
-                    if (imagesT[imageN] == "stereoLR")
+                    if (imagesT[imageN] === "stereoLR")
                         stereoSwap_ = !stereoSwap_;
                     if (!stereoSwap_)
                         ctx.drawImage(img, 0, 0, img.width / 2, img.height,
@@ -766,7 +767,7 @@ function stereoDrawImage() {
 
                 case 2: //only Right
                     prepareWH2();
-                    if (imagesT[imageN] == "stereoLR")
+                    if (imagesT[imageN] === "stereoLR")
                         stereoSwap_ = !stereoSwap_;
                     if (!stereoSwap_)
                         ctx.drawImage(img, img.width / 2, 0, img.width / 2, img.height,
@@ -784,7 +785,7 @@ function stereoDrawImage() {
                     idr = iData2;
                     idg = iData1;
                     idb = iData1;
-                    if (stereoGlasses == sGlassesGreenMagenta) {
+                    if (stereoGlasses === sGlassesGreenMagenta) {
                         idr = iData1;
                         idg = iData2;
                         idb = iData1;
@@ -809,7 +810,7 @@ function stereoDrawImage() {
                     idr = iData2;
                     idg = iData1;
                     idb = iData1;
-                    if (stereoGlasses == sGlassesGreenMagenta) {
+                    if (stereoGlasses === sGlassesGreenMagenta) {
                         idr = iData1;
                         idg = iData2;
                         idb = iData1;
@@ -838,7 +839,7 @@ function stereoDrawImage() {
                     idr = iData2;
                     idg = iData1;
                     idb = iData1;
-                    if (stereoGlasses == sGlassesGreenMagenta) {
+                    if (stereoGlasses === sGlassesGreenMagenta) {
                         idr = iData1;
                         idg = iData2;
                         idb = iData1;
@@ -872,7 +873,7 @@ function stereoDrawImage() {
                     idr = iData2;
                     idg = iData1;
                     idb = iData1;
-                    if (stereoGlasses == sGlassesGreenMagenta) {
+                    if (stereoGlasses === sGlassesGreenMagenta) {
                         idr = iData1;
                         idg = iData2;
                         idb = iData1;
@@ -903,7 +904,7 @@ function stereoDrawImage() {
                     idr = iData2;
                     idg = iData1;
                     idb = iData1;
-                    if (stereoGlasses == sGlassesGreenMagenta) {
+                    if (stereoGlasses === sGlassesGreenMagenta) {
                         idr = iData1;
                         idg = iData2;
                         idb = iData1;
@@ -932,7 +933,7 @@ function stereoDrawImage() {
                     idr = iData2;
                     idg = iData1;
                     idb = iData1;
-                    if (stereoGlasses == sGlassesGreenMagenta) {
+                    if (stereoGlasses === sGlassesGreenMagenta) {
                         idr = iData1;
                         idg = iData2;
                         idb = iData2;
@@ -941,7 +942,7 @@ function stereoDrawImage() {
                     for (x = 0; x++ < y; ) {
                         // Data2 - left; Data1 - right
                         r = idr.data[index+0] * 0.299 + idr.data[index+1] * 0.587 + idr.data[index+2] * 0.114;
-                        if (stereoGlasses == sGlassesGreenMagenta) {
+                        if (stereoGlasses === sGlassesGreenMagenta) {
                             g = idg.data[index+0] * 0.299 + idg.data[index+1] * 0.587 + idg.data[index+2] * 0.114;
                             b = 0;
                         } else {
@@ -1036,7 +1037,7 @@ function stereoCountImages() {
             var arrList = obj.className.split(" ");
             for (var i = 0; i < arrList.length; i++) {
                 for (var j = 0; j < c.length; j++)
-                    if (arrList[i] == c[j])
+                    if (arrList[i] === c[j])
                         return c[j];
             }
         }
@@ -1045,14 +1046,14 @@ function stereoCountImages() {
 
     var j, n = 0;
     for (j = 0; j < document.images.length; j++) {
-        var cn = getClassName(document.images[j], new Array("anaglyph", "flat", "stereo", "stereoLR", "stereoRL"));
-        if (cn != "") {
+        var cn = getClassName(document.images[j], ["anaglyph", "flat", "stereo", "stereoLR", "stereoRL"]);
+        if (cn !== "") {
             images[n] = document.images[j].src;
             imagesC[n] = document.images[j].getAttribute(stereoCaptionSrc);
             imagesT[n] = cn;
-            if (imagesT[n] == "stereo")
+            if (imagesT[n] === "stereo")
                 imagesT[n] = stereoDefType;
-            if (n == 0) {
+            if (n === 0) {
                 var img = new Image;
                 img.src = images[n];
                 img.onload = stereoDrawImage;
@@ -1116,7 +1117,7 @@ function stereoKeyPress(e) {
         stereoDrawImage();
         var elmnt = document.getElementById("modeselect");
         for (var i = 0; i <= stereoModes; i++)
-            elmnt.options[i].selected = stereoMode == i;
+            elmnt.options[i].selected = stereoMode === i;
 
         stereoCorrectAfterMode();
 
@@ -1213,8 +1214,8 @@ function stereoGetCookieForFirstTimeHelpDisplayed() {
     stereoFirstTimeHelpDisplayed = true;
     var a = document.cookie.split(";");
     for (var i = 0; i < a.length; i++)
-        if (a[i].substr(0,a[i].indexOf("=")).trim() == "HTML5_STEREO_VIEWER_FIRST_TIME_HELP_DISPLAYED") {
-            stereoFirstTimeHelpDisplayed = (unescape(a[i].substr(a[i].indexOf("=")+1)) != "YES");
+        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_FIRST_TIME_HELP_DISPLAYED") {
+            stereoFirstTimeHelpDisplayed = (unescape(a[i].substr(a[i].indexOf("=")+1)) !== "YES");
             return stereoFirstTimeHelpDisplayed;
             }
     return stereoFirstTimeHelpDisplayed;
@@ -1223,7 +1224,7 @@ function stereoGetCookieForFirstTimeHelpDisplayed() {
 function stereoGetCookie() {
     var a = document.cookie.split(";");
     for (var i = 0; i < a.length; i++)
-        if (a[i].substr(0,a[i].indexOf("=")).trim() == "HTML5_STEREO_VIEWER")
+        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER")
             return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)));
     return -1;
 }
@@ -1231,7 +1232,7 @@ function stereoGetCookie() {
 function stereoGetCookieSwap() {
     var a = document.cookie.split(";");
     for (var i = 0; i < a.length; i++)
-        if (a[i].substr(0,a[i].indexOf("=")).trim() == "HTML5_STEREO_VIEWER_SWAP")
+        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_SWAP")
             return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)));
     return false;
 }
@@ -1239,7 +1240,7 @@ function stereoGetCookieSwap() {
 function stereoGetCookieGlasses() {
     var a = document.cookie.split(";");
     for (var i = 0; i < a.length; i++)
-        if (a[i].substr(0,a[i].indexOf("=")).trim() == "HTML5_STEREO_VIEWER_GLASSES")
+        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_GLASSES")
             return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)));
     return false;
 }
