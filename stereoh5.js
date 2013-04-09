@@ -48,6 +48,8 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     Type       - default stereo images type ("anaglyph", "flat", "stereoLR", "stereoRL", ""), for images with class="stereo". The value "" corresponds to "stereoRL"
     */
 
+    var i;
+
     if (Caption) {
         stereoCaption = Caption;
     }
@@ -208,10 +210,10 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
                 '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>';
     }
 
-    document.body.onkeyup = function(event){stereoKeyPress(event);};
-    document.body.onmousewheel = function(event){stereoViewerClose(event);};
-    document.body.onscroll = function(event){stereoViewerClose(event);};
-    document.body.onorientationchange = function(event){stereoDrawImage();};
+    document.body.onkeyup = function (event) { stereoKeyPress(event); };
+    document.body.onmousewheel = function (event) { stereoViewerClose(event); };
+    document.body.onscroll = function (event) { stereoViewerClose(event); };
+    document.body.onorientationchange = function (event) { stereoDrawImage(); };
 
     document.getElementById("stereoControls").style.zIndex = 999991;
 
@@ -236,11 +238,13 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
         stereoGlasses = stereoGetCookieGlasses();
     }
 
-    for (var i = 0; i <= stereoModes; i++)
+    for (i = 0; i <= stereoModes; i++) {
         document.getElementById("modeselect").options[i].selected = stereoMode === i;
+    }
 
-    for (var i = 0; i < document.getElementById("stereoGlasses").options.length; i++)
+    for (i = 0; i < document.getElementById("stereoGlasses").options.length; i++) {
         document.getElementById("stereoGlasses").options[i].selected = stereoGlasses === i;
+    }
 
     stereoCorrectAfterMode();
 
@@ -248,18 +252,20 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     document.getElementById("stereoCap").checked = stereoCaption;
 
     if (stereoiOS) {
-        meta = document.createElement("meta");
+        var meta = document.createElement("meta");
         meta.name = "viewport";
         meta.content = "width = device-width; initial-scale = 1.0; user-scalable = no; maximum-scale=1.0; minimum-scale=1.0; target-densityDpi=device-dpi;";
         var b = false;
-        for (var i = 0; i < document.getElementsByTagName("head")[0].childNodes.length; i++)
+        for (i = 0; i < document.getElementsByTagName("head")[0].childNodes.length; i++) {
             if (document.getElementsByTagName("head")[0].childNodes[i].name === "viewport") {
                 document.getElementsByTagName("head")[0].replaceChild(meta, document.getElementsByTagName("head")[0].childNodes[i]);
                 b = true;
                 break;
             }
-        if (!b)
+        }
+        if (!b) {
             document.getElementsByTagName("head")[0].appendChild(meta);
+        }
     }
 
     stereoCountImages();
@@ -277,14 +283,15 @@ function stereoViewerClose() {
     document.body.removeChild(document.getElementById("stereoViewer"));
 
     if (stereoiOS) {
-        meta = document.createElement("meta");
+        var meta = document.createElement("meta");
         meta.name = "viewport";
         meta.content = "width = device-width; initial-scale = 1.0; user-scalable = yes;";
-        for (var i = 0; i < document.getElementsByTagName("head")[0].childNodes.length; i++)
+        for (var i = 0; i < document.getElementsByTagName("head")[0].childNodes.length; i++) {
             if (document.getElementsByTagName("head")[0].childNodes[i].name === "viewport") {
                 document.getElementsByTagName("head")[0].replaceChild(meta, document.getElementsByTagName("head")[0].childNodes[i]);
                 break;
             }
+        }
     }
 }
 
@@ -305,7 +312,7 @@ function stereoMouseClick(event) {
     if (!event) {
         event = window.event;
     }
-    if (event.pageX || event.pageY)    {
+    if (event.pageX || event.pageY) {
         mx = event.pageX;
         my = event.pageY;
     }
@@ -315,63 +322,71 @@ function stereoMouseClick(event) {
     }
 
     //if (stereoiOS) {
-        if (mx < cnvs.width / 3) {  //left
+        if (mx < cnvs.width / 3) { // left
             stereoPrevImage();
             b = true;
         }
-        else
-        if (mx >= 2 * cnvs.width / 3) {     //right
+        else if (mx >= 2 * cnvs.width / 3) { // right
             stereoNextImage();
             b = true;
         }
     //}
-    /*else //buttons
-        if (stereoNav > 0) {
-            if ((mx >= 0) && (mx < stereoNav) && (my >= 0) && (my < cnvs.height)) {  //left
-                stereoPrevImage();
-                b = true;
-            }
-            else
-            if ((mx >= cnvs.width - stereoNav) && (mx < cnvs.width) && (my >= 0) && (my < cnvs.height)) {     //right
-                stereoNextImage();
-                b = true;
-            }
-        }*/
-    if (!b) {    //center
+
+    /*
+    // buttons
+    else if (stereoNav > 0) {
+        if ((mx >= 0) && (mx < stereoNav) && (my >= 0) && (my < cnvs.height)) { // left
+            stereoPrevImage();
+            b = true;
+        }
+        else if ((mx >= cnvs.width - stereoNav) && (mx < cnvs.width) && (my >= 0) && (my < cnvs.height)) { // right
+            stereoNextImage();
+            b = true;
+        }
+    }
+    */
+
+    if (!b) { // center
         stereoViewerOptionsOpen(!stereoOptVis);
     }
 }
 
 function stereoViewerOptionsOpen(value) {
     var s;
-    if (value)
-        s = "visible"
-    else
+    if (value) {
+        s = "visible";
+    }
+    else {
         s = "hidden";
+    }
     document.getElementById("stereoControls").style.visibility = s;
     if (!value) {
         document.getElementById("stereoHelp").style.visibility = s;
-        document.getElementById("stereoAbout").style.visibility = s
+        document.getElementById("stereoAbout").style.visibility = s;
     }
-    stereoOptVis = value
+    stereoOptVis = value;
 }
 
 function stereoHelpOpen(value) {
     var s;
-    if (document.getElementById("stereoHelp").style.visibility === "hidden")
-        s = "visible"
-    else
+    if (document.getElementById("stereoHelp").style.visibility === "hidden") {
+        s = "visible";
+    }
+    else {
         s = "hidden";
+    }
     document.getElementById("stereoHelp").style.visibility = s;
     document.getElementById("stereoAbout").style.visibility = "hidden";
 }
 
 function stereoAboutOpen(value) {
     var s;
-    if (document.getElementById("stereoAbout").style.visibility === "hidden")
-        s = "visible"
-    else
+    if (document.getElementById("stereoAbout").style.visibility === "hidden") {
+        s = "visible";
+    }
+    else {
         s = "hidden";
+    }
     document.getElementById("stereoAbout").style.visibility = s;
     document.getElementById("stereoHelp").style.visibility = "hidden";
 }
@@ -389,7 +404,7 @@ function stereoDrawControls(event) {
     if (!event) {
         event = window.event;
     }
-    if (event.pageX || event.pageY)    {
+    if (event.pageX || event.pageY) {
         mx = event.pageX;
         my = event.pageY;
     }
@@ -446,21 +461,19 @@ function stereoDrawControls(event) {
                 color22 = "rgba(240, 240, 240, 1.0)";
         }
 
-        if ((mx >= 0) && (mx < stereoNav) && (my >= 0) && (my < cnvs.height)) {  //left
+        if ((mx >= 0) && (mx < stereoNav) && (my >= 0) && (my < cnvs.height)) { // left
             if (stereoMouse !== 0) {
                 _draw(color1, color2, color11, color22);
                 stereoMouse = 0;
             }
         }
-        else
-        if ((mx >= cnvs.width - stereoNav) && (mx < cnvs.width) && (my >= 0) && (my < cnvs.height)) {     //right
+        else if ((mx >= cnvs.width - stereoNav) && (mx < cnvs.width) && (my >= 0) && (my < cnvs.height)) { // right
             if (stereoMouse !== 2) {
                 _draw(color2, color1, color22, color11);
                 stereoMouse = 2;
             }
         }
-        else
-        if (stereoMouse !== 1) {
+        else if (stereoMouse !== 1) {
             _draw(color2, color2, color22, color22);
             stereoMouse = 1;
         }
@@ -532,18 +545,24 @@ function stereoDrawImage() {
         cnvswidth = document.getElementById("stereoViewer").clientWidth,
         elmnt = document.getElementById("stereoCanvasdiv");
 
-    //if (elmnt.height !== cnvsheight)
+    //if (elmnt.height !== cnvsheight) {
         elmnt.height = cnvsheight;
-    //if (elmnt.width !== cnvswidth)
+    //}
+    //if (elmnt.width !== cnvswidth) {
         elmnt.width = cnvswidth;
+    //}
+
     elmnt = document.getElementById("stereoCanvas");
-    //if (elmnt.height !== cnvsheight)
+
+    //if (elmnt.height !== cnvsheight) {
         elmnt.height = cnvsheight;
-    //if (width !== cnvswidth)
+    //}
+    //if (width !== cnvswidth) {
         elmnt.width = cnvswidth;
+    //}
 
     ///////////////////////////////////
-    img = new Image();
+    var img = new Image();
     img.src = images[imageN];
 
     switch (stereoBGcolor) {
@@ -559,6 +578,113 @@ function stereoDrawImage() {
     ctx.fillRect(stereoNav, 0, cnvswidth - stereoNav * 2, cnvsheight);
     document.getElementById("stereoViewer").style.backgroundColor = ctx.fillStyle;
 
+    function prepareAnaglyphData(inter) {
+        buf = document.createElement('canvas');
+        buf.width = imw * 2;
+        buf.height = imh;
+        bufctx = buf.getContext('2d');
+        bufctx.drawImage(img, 0, 0, imw * 2, imh);
+
+        if (!inter) {
+            imageData = ctx.createImageData(imw, imh);
+        }
+        else if (stereoMode_ === 10) {
+            imageData = ctx.createImageData(imw, imh * 2);
+        }
+        else {
+            imageData = ctx.createImageData(imw * 2, imh);
+        }
+
+        if (imagesT[imageN] === "stereoLR") {
+            stereoSwap_ = !stereoSwap_;
+        }
+
+        var ssw = stereoSwap_;
+        if (inter) {
+            switch (stereoMode_) {
+                case 10:
+                    if (((cnvsheight - mc - imh * 2) / 2) % 2 === 0) {
+                        ssw = !ssw;
+                    }
+                    break;
+                case 11:
+                    if (((cnvswidth - imw * 2) / 2) % 2 === 0) {
+                        ssw = !ssw;
+                    }
+                    break;
+            }
+        }
+
+        if (!ssw) {
+            iData1 = bufctx.getImageData(0, 0, imw, imh);
+            iData2 = bufctx.getImageData(imw, 0, imw, imh);
+        }
+        else {
+            iData2 = bufctx.getImageData(0, 0, imw, imh);
+            iData1 = bufctx.getImageData(imw, 0, imw, imh);
+        }
+    }
+
+    function _getLines(phrase, maxPxLength) {
+        var phraseArray = [];
+        if (phrase) {
+            var wa = phrase.split(" "),
+                lastPhrase = "",
+                l = maxPxLength,
+                measure = 0;
+            for (var i=0; i < wa.length; i++) {
+                var w = wa[i];
+                measure = ctx.measureText(lastPhrase + w).width;
+                if (measure < l) {
+                    lastPhrase += (" "+w);
+                }
+                else {
+                    phraseArray.push(lastPhrase);
+                    lastPhrase = w;
+                }
+
+                if (i === wa.length - 1) {
+                    phraseArray.push(lastPhrase);
+                    break;
+                }
+            }
+        }
+        return phraseArray;
+    }
+
+    function _drawText(num) {
+        var i, s;
+        if (stereoCaption) {
+            ctx.font = "bold 12px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            switch (stereoBGcolor) {
+                case 0:
+                    ctx.fillStyle = "rgba(128, 128, 128, 1)";
+                    break;
+                case 1:
+                    ctx.fillStyle = "rgba(255, 255, 255, 1)";
+                    break;
+                case 2:
+                    ctx.fillStyle = "rgba(128, 128, 128, 1)";
+            }
+            var h = ctx.measureText("Wg").width;
+            if (num === 1) {
+                s = _getLines(imagesC[imageN], cnvswidth - 36);
+                for (i = 0; i < s.length; i++) {
+                    ctx.fillText(s[i], cnvswidth / 2, cnvsheight / 2 + imh / 2 + i * h);
+                }
+            } else {
+                s = _getLines(imagesC[imageN], imw / 2 - 36);
+                for (i = 0; i < s.length; i++) {
+                    var e = ctx.measureText(s[i]).height;
+                    ctx.fillText(s[i], (cnvswidth - imw) / 2 + imw / 4, cnvsheight / 2 + imh / 2 + i * h);
+                    ctx.fillText(s[i], cnvswidth / 2 + imw / 4, cnvsheight / 2 + imh / 2 + i * h);
+                }
+            }
+        }
+    }
+
     if (images.length > 0) {
         var buf, bufctx, iData1, iData2, idr, idg, idb,
             r, g, b,
@@ -568,106 +694,6 @@ function stereoDrawImage() {
             index1_ = 0,
             index2_ = 0,
             indexy = 0;
-
-        function prepareAnaglyphData(inter) {
-            buf = document.createElement('canvas');
-            buf.width = imw * 2;
-            buf.height = imh;
-            bufctx = buf.getContext('2d');
-            bufctx.drawImage(img, 0, 0, imw * 2, imh);
-
-            if (!inter)
-                imageData = ctx.createImageData(imw, imh)
-            else
-                if (stereoMode_ === 10)
-                    imageData = ctx.createImageData(imw, imh * 2)
-                else
-                    imageData = ctx.createImageData(imw * 2, imh);
-
-            if (imagesT[imageN] === "stereoLR")
-                stereoSwap_ = !stereoSwap_;
-
-            var ssw = stereoSwap_;
-            if (inter) {
-                switch (stereoMode_) {
-                    case 10:
-                        if (((cnvsheight - mc - imh * 2) / 2) % 2 === 0)
-                            ssw = !ssw;
-                        break;
-                    case 11:
-                        if (((cnvswidth - imw * 2) / 2) % 2 === 0)
-                            ssw = !ssw;
-                        break;
-                }
-            }
-
-            if (!ssw) {
-                iData1 = bufctx.getImageData(0, 0, imw, imh);
-                iData2 = bufctx.getImageData(imw, 0, imw, imh)
-            }
-            else {
-                iData2 = bufctx.getImageData(0, 0, imw, imh);
-                iData1 = bufctx.getImageData(imw, 0, imw, imh)
-            }
-        }
-
-        function _getLines(phrase, maxPxLength) {
-            var phraseArray = [];
-            // TODO: simple truthy check?
-            if (phrase != null) {
-                var wa = phrase.split(" "),
-                    lastPhrase = "",
-                    l = maxPxLength,
-                    measure = 0;
-                for (var i=0; i < wa.length; i++) {
-                    var w = wa[i];
-                    measure = ctx.measureText(lastPhrase + w).width;
-                    if (measure < l)
-                        lastPhrase += (" "+w)
-                    else {
-                        phraseArray.push(lastPhrase);
-                        lastPhrase = w;
-                    }
-                    if (i === wa.length - 1) {
-                        phraseArray.push(lastPhrase);
-                        break;
-                    }
-                }
-            }
-            return phraseArray;
-        }
-
-        function _drawText(num) {
-
-            if (stereoCaption) {
-                ctx.font = "bold 12px sans-serif";
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                switch (stereoBGcolor) {
-                    case 0:
-                        ctx.fillStyle = "rgba(128, 128, 128, 1)";
-                        break;
-                    case 1:
-                        ctx.fillStyle = "rgba(255, 255, 255, 1)";
-                        break;
-                    case 2:
-                        ctx.fillStyle = "rgba(128, 128, 128, 1)";
-                }
-                var h = ctx.measureText("Wg").width;
-                if (num === 1) {
-                    var s = _getLines(imagesC[imageN], cnvswidth - 36);
-                    for (var i = 0; i < s.length; i++)
-                        ctx.fillText(s[i], cnvswidth / 2, cnvsheight / 2 + imh / 2 + i * h)
-                } else {
-                    var s = _getLines(imagesC[imageN], imw / 2 - 36);
-                    for (var i = 0; i < s.length; i++) {
-                        var e = ctx.measureText(s[i]).height;
-                        ctx.fillText(s[i], (cnvswidth - imw) / 2 + imw / 4, cnvsheight / 2 + imh / 2 + i * h);
-                        ctx.fillText(s[i], cnvswidth / 2 + imw / 4, cnvsheight / 2 + imh / 2 + i * h)
-                    }
-                }
-            }
-        }
 
         switch (imagesT[imageN]) {
             case "flat":
@@ -727,58 +753,68 @@ function stereoDrawImage() {
                 case 2:
                     ctx.fillStyle = "rgba(128, 128, 128, 1)";
             }
-            ctx.fillText("Loading...", cnvswidth / 2, cnvsheight / 2)
+            ctx.fillText("Loading...", cnvswidth / 2, cnvsheight / 2);
         }
-        else
+        else {
             switch (stereoMode_) {
 
-                case 1: //RL
+                case 1: // RL
                     stereoSwap_ = !stereoSwap_;
-                case 0: //LR
+                case 0: // LR
                     prepareWH();
-                    if (imagesT[imageN] === "stereoLR")
+                    if (imagesT[imageN] === "stereoLR") {
                         stereoSwap_ = !stereoSwap_;
-                    if (!stereoSwap_)
-                        ctx.drawImage(img, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imh)
+                    }
+                    if (!stereoSwap_) {
+                        ctx.drawImage(img, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imh);
+                    }
                     else {
                         ctx.drawImage(img, 0, 0, img.width / 2, img.height,
                                             (cnvswidth - imw) / 2 + imw / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh);
                         ctx.drawImage(img, img.width / 2, 0, img.width / 2, img.height,
-                                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh)
+                                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh);
                     }
-                    if ((imagesT[imageN] === "flat") || (imagesT[imageN] === "anaglyph"))
-                        _drawText(1)
-                    else
+                    if ((imagesT[imageN] === "flat") || (imagesT[imageN] === "anaglyph")) {
+                        _drawText(1);
+                    }
+                    else {
                         _drawText(2);
+                    }
                     break;
 
-                case 3: //only Left
+                case 3: // only Left
                     prepareWH2();
-                    if (imagesT[imageN] === "stereoLR")
+                    if (imagesT[imageN] === "stereoLR") {
                         stereoSwap_ = !stereoSwap_;
-                    if (!stereoSwap_)
+                    }
+                    if (!stereoSwap_) {
                         ctx.drawImage(img, 0, 0, img.width / 2, img.height,
-                                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imw * (img.height / img.width * 2))
-                    else
+                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imw * (img.height / img.width * 2));
+                    }
+                    else {
                         ctx.drawImage(img, img.width / 2, 0, img.width / 2, img.height,
-                                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imw * (img.height / img.width * 2));
+                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imw * (img.height / img.width * 2));
+                    }
                     _drawText(1);
                     break;
 
-                case 2: //only Right
+                case 2: // only Right
                     prepareWH2();
-                    if (imagesT[imageN] === "stereoLR")
+                    if (imagesT[imageN] === "stereoLR") {
                         stereoSwap_ = !stereoSwap_;
-                    if (!stereoSwap_)
+                    }
+                    if (!stereoSwap_) {
                         ctx.drawImage(img, img.width / 2, 0, img.width / 2, img.height,
-                                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imw * (img.height / img.width * 2))
-                    else
+                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imw * (img.height / img.width * 2));
+                    }
+                    else {
                         ctx.drawImage(img, 0, 0, img.width / 2, img.height,
-                                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imw * (img.height / img.width * 2));
+                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw, imw * (img.height / img.width * 2));
+                    }
                     _drawText(1);
                     break;
 
-                case 4: //color anaglyph
+                case 4: // color anaglyph
                     prepareWH2();
                     prepareAnaglyphData(false);
 
@@ -803,7 +839,7 @@ function stereoDrawImage() {
                     _drawText(1);
                     break;
 
-                case 5: //optimized color anaglyph
+                case 5: // optimized color anaglyph
                     prepareWH2();
                     prepareAnaglyphData(false);
 
@@ -832,7 +868,7 @@ function stereoDrawImage() {
                     _drawText(1);
                     break;
 
-                case 6: //optimized+ color anaglyph
+                case 6: // optimized+ color anaglyph
                     prepareWH2();
                     prepareAnaglyphData(false);
 
@@ -866,7 +902,7 @@ function stereoDrawImage() {
                     _drawText(1);
                     break;
 
-                case 7: //gray anaglyph
+                case 7: // gray anaglyph
                     prepareWH2();
                     prepareAnaglyphData(false);
 
@@ -897,7 +933,7 @@ function stereoDrawImage() {
                     _drawText(1);
                     break;
 
-                case 8: //half color anaglyph
+                case 8: // half color anaglyph
                     prepareWH2();
                     prepareAnaglyphData();
 
@@ -926,7 +962,7 @@ function stereoDrawImage() {
                     _drawText(1);
                     break;
 
-                case 9: //true anaglyph
+                case 9: // true anaglyph
                     prepareWH2();
                     prepareAnaglyphData(false);
 
@@ -961,7 +997,7 @@ function stereoDrawImage() {
                     _drawText(1);
                     break;
 
-                case 10: //interlaced
+                case 10: // interlaced
                     prepareWH2i();
                     prepareAnaglyphData(true);
 
@@ -988,7 +1024,7 @@ function stereoDrawImage() {
                     _drawText(1);
                     break;
 
-                case 11: //interlaced vertical
+                case 11: // interlaced vertical
                     prepareWH2iv();
                     prepareAnaglyphData(true);
 
@@ -1011,6 +1047,7 @@ function stereoDrawImage() {
                     break;
 
             } //switch
+        }
     } else {
         ctx.font = "bold 12px sans-serif";
         ctx.textAlign = "center";
@@ -1025,7 +1062,7 @@ function stereoDrawImage() {
             case 2:
                 ctx.fillStyle = "rgba(128, 128, 128, 1)";
         }
-        ctx.fillText("No stereo images", cnvswidth / 2, cnvsheight / 2)
+        ctx.fillText("No stereo images", cnvswidth / 2, cnvsheight / 2);
     }
     ///////////////////////////////////
     stereoDrawControls();
@@ -1036,9 +1073,11 @@ function stereoCountImages() {
         if (obj.className) {
             var arrList = obj.className.split(" ");
             for (var i = 0; i < arrList.length; i++) {
-                for (var j = 0; j < c.length; j++)
-                    if (arrList[i] === c[j])
+                for (var j = 0; j < c.length; j++) {
+                    if (arrList[i] === c[j]) {
                         return c[j];
+                    }
+                }
             }
         }
         return "";
@@ -1051,10 +1090,11 @@ function stereoCountImages() {
             images[n] = document.images[j].src;
             imagesC[n] = document.images[j].getAttribute(stereoCaptionSrc);
             imagesT[n] = cn;
-            if (imagesT[n] === "stereo")
+            if (imagesT[n] === "stereo") {
                 imagesT[n] = stereoDefType;
+            }
             if (n === 0) {
-                var img = new Image;
+                var img = new Image();
                 img.src = images[n];
                 img.onload = stereoDrawImage;
             }
@@ -1065,50 +1105,64 @@ function stereoCountImages() {
 }
 
 function stereoPrevImage() {
-    if (imageN > 0) imageN--
-    else imageN = images.length - 1;
-    if (imageN < 0) imageN = 0;
-    stereoDrawImage()
+    if (imageN > 0) {
+        imageN--;
+    }
+    else {
+        imageN = images.length - 1;
+    }
+    if (imageN < 0) {
+        imageN = 0;
+    }
+    stereoDrawImage();
 }
 
 function stereoNextImage() {
-    if (imageN < images.length - 1)    imageN++
-    else imageN = 0;
-    stereoDrawImage()
+    if (imageN < images.length - 1) {
+        imageN++;
+    }
+    else {
+        imageN = 0;
+    }
+    stereoDrawImage();
 }
 
 function stereoModeChange(value) {
     var elmnt = document.getElementById("modeselect");
-    for (var i = 0; i <= stereoModes; i++)
+    for (var i = 0; i <= stereoModes; i++) {
         if (elmnt.options[i].selected) {
             stereoMode = i;
             break;
         }
+    }
     stereoSwap = document.getElementById("stereoSwap").checked;
     stereoCaption = document.getElementById("stereoCap").checked;
 
     stereoCorrectAfterMode();
 
-    stereoDrawImage()
+    stereoDrawImage();
 }
 
 function stereoGlassesChange() {
     var elmnt = document.getElementById("stereoGlasses");
-    for (var i = 0; i < elmnt.options.length; i++)
+    for (var i = 0; i < elmnt.options.length; i++) {
         if (elmnt.options[i].selected) {
             stereoGlasses = i;
             break;
         }
-    stereoDrawImage()
+    }
+    stereoDrawImage();
 }
 
 function stereoKeyPress(e) {
     var keynum;
 
-    if (window.event) // IE
-        keynum = e.keyCode
-    else if (e.which) // Netscape/Firefox/Opera
+    if (window.event) { // IE
+        keynum = e.keyCode;
+    }
+    else if (e.which) { // Netscape/Firefox/Opera
         keynum = e.which;
+    }
 
     //alert(keynum);
 
@@ -1116,8 +1170,9 @@ function stereoKeyPress(e) {
         stereoMode = value;
         stereoDrawImage();
         var elmnt = document.getElementById("modeselect");
-        for (var i = 0; i <= stereoModes; i++)
+        for (var i = 0; i <= stereoModes; i++) {
             elmnt.options[i].selected = stereoMode === i;
+        }
 
         stereoCorrectAfterMode();
 
@@ -1172,30 +1227,36 @@ function stereoSaveAs() {
 
 function stereoBG(c) {
     stereoBGcolor = c;
-    if (document.getElementById("stereoNav").checked && !stereoiOS)
-        stereoNav = stereoNavDef
-    else
+    if (document.getElementById("stereoNav").checked && !stereoiOS) {
+        stereoNav = stereoNavDef;
+    }
+    else {
         stereoNav = 0;
+    }
     stereoMouse = -1;
 
     stereoDrawImage();
-    stereoDrawControls()
+    stereoDrawControls();
 }
 
 function stereoSaveDef() {
-    if (stereoGetCookie() < 0)
-        stereoSetCookie(stereoMode, stereoSwap ? 1 : 0, stereoGlasses)
-    else
+    if (stereoGetCookie() < 0) {
+        stereoSetCookie(stereoMode, stereoSwap ? 1 : 0, stereoGlasses);
+    }
+    else {
         stereoSetCookie(-1, stereoSwap ? 1 : 0, 0);
+    }
     stereoCheckCookie();
 }
 
 function stereoCheckCookie() {
     var sm = stereoGetCookie();
-    if ((sm >= 0) && (sm <= stereoModes))
-        document.getElementById("stereoSaveDef").value = "Forget Defaults"
-    else
+    if ((sm >= 0) && (sm <= stereoModes)) {
+        document.getElementById("stereoSaveDef").value = "Forget Defaults";
+    }
+    else {
         document.getElementById("stereoSaveDef").value = "Save as Default";
+    }
     document.getElementById("stereoSwap").checked = stereoGetCookieSwap() > 0;
     //document.getElementById("stereoGlasses").checked = stereoGetCookieGlasses();
 }
@@ -1213,35 +1274,42 @@ function stereoSetCookieForFirstTimeHelpDisplayed() {
 function stereoGetCookieForFirstTimeHelpDisplayed() {
     stereoFirstTimeHelpDisplayed = true;
     var a = document.cookie.split(";");
-    for (var i = 0; i < a.length; i++)
+    for (var i = 0; i < a.length; i++) {
         if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_FIRST_TIME_HELP_DISPLAYED") {
             stereoFirstTimeHelpDisplayed = (unescape(a[i].substr(a[i].indexOf("=")+1)) !== "YES");
             return stereoFirstTimeHelpDisplayed;
-            }
+        }
+    }
     return stereoFirstTimeHelpDisplayed;
 }
 
 function stereoGetCookie() {
     var a = document.cookie.split(";");
-    for (var i = 0; i < a.length; i++)
-        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER")
-            return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)));
+    for (var i = 0; i < a.length; i++) {
+        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER") {
+            return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)), 10);
+        }
+    }
     return -1;
 }
 
 function stereoGetCookieSwap() {
     var a = document.cookie.split(";");
-    for (var i = 0; i < a.length; i++)
-        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_SWAP")
-            return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)));
+    for (var i = 0; i < a.length; i++) {
+        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_SWAP") {
+            return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)), 10);
+        }
+    }
     return false;
 }
 
 function stereoGetCookieGlasses() {
     var a = document.cookie.split(";");
-    for (var i = 0; i < a.length; i++)
-        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_GLASSES")
-            return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)));
+    for (var i = 0; i < a.length; i++) {
+        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_GLASSES") {
+            return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)), 10);
+        }
+    }
     return false;
 }
 
