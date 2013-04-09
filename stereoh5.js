@@ -11,32 +11,32 @@ To view a copy of this license,
 visit http://creativecommons.org/licenses/by/3.0/
 */
 
-var stereover = "1.5";
-var images = new Array();
-var imagesT = new Array();
-var imagesC = new Array();
-var imageN = 0;
-var stereoMode = 5;
-var stereoBGcolor = 0;
-var stereoMouse = -1;
-var stereoNavDef = 0;//30;
-var stereoNav = stereoNavDef;
-var stereoOptVis = false;
-var stereoSwap = false;
-var stereoCaption = true;
-var stereoCaptionSrc = "alt";
-var stereoDefType = "stereoRL";
-var stereoiOS = false;
-var stereoiOS_iPad = false;
-var stereoiOS_iPhone = false;
-var stereoIE = false;
-var stereourl = "http://urixblog.com/html5-stereo-viewer";
-var stereourlvis = "http://urixblog.com/...";
-var stereoModes = 11;
-var stereoGlasses = 0;
-var sGlassesRedCyan = 0;
-var sGlassesGreenMagenta = 1;
-var stereoFirstTimeHelpDisplayed = true;
+var stereover = "1.5",
+    images = [],
+    imagesT = [],
+    imagesC = [],
+    imageN = 0,
+    stereoMode = 5,
+    stereoBGcolor = 0,
+    stereoMouse = -1,
+    stereoNavDef = 0, //30;
+    stereoNav = stereoNavDef,
+    stereoOptVis = false,
+    stereoSwap = false,
+    stereoCaption = true,
+    stereoCaptionSrc = "alt",
+    stereoDefType = "stereoRL",
+    stereoiOS = false,
+    stereoiOS_iPad = false,
+    stereoiOS_iPhone = false,
+    stereoIE = false,
+    stereourl = "http://urixblog.com/html5-stereo-viewer",
+    stereourlvis = "http://urixblog.com/...",
+    stereoModes = 11,
+    stereoGlasses = 0,
+    sGlassesRedCyan = 0,
+    sGlassesGreenMagenta = 1,
+    stereoFirstTimeHelpDisplayed = true;
 
 function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     /*
@@ -48,29 +48,35 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     Type        - default stereo images type ("anaglyph", "flat", "stereoLR", "stereoRL", ""), for images with class="stereo". The value "" corresponds to "stereoRL"
     */
 
-    if (Caption != undefined)
+    if (Caption) {
         stereoCaption = Caption;
-    if (CaptionSrc != "")
+    }
+    if (CaptionSrc !== "") {
         stereoCaptionSrc = CaptionSrc;
-    if (Type != "")
+    }
+    if (Type !== "") {
         stereoDefType = Type;
-    if ((Mode != undefined) & (Mode >= 0) & (Mode <= stereoModes))
+    }
+    if (Mode && Mode >= 0 && Mode <= stereoModes) {
         stereoMode = Mode;
-    if (Swap != undefined)
+    }
+    if (Swap) {
         stereoSwap = Swap;
+    }
 
-    stereoiOS_iPhone = (navigator.appVersion.indexOf("iPhone") != -1) | (navigator.appVersion.indexOf("iPod") != -1);
+    stereoiOS_iPhone = (navigator.appVersion.indexOf("iPhone") != -1) || (navigator.appVersion.indexOf("iPod") != -1);
     stereoiOS_iPad = (navigator.appVersion.indexOf("iPad") != -1);
-    stereoiOS = stereoiOS_iPad | stereoiOS_iPhone;
-    if (stereoiOS)
+    stereoiOS = stereoiOS_iPad || stereoiOS_iPhone;
+    if (stereoiOS) {
         stereoNav = 0;
+    }
 
     stereoIE = (/MSIE (\d+\.\d+);/.test(navigator.userAgent));
 
     if (document.getElementById("stereoViewer")) {
         document.body.insertBefore(document.getElementById("stereoViewer"), document.body.firstChild);
         document.body.removeChild(document.getElementById("stereoViewer"));
-    };
+    }
 
     var div = document.createElement("div");
     div.id = "stereoViewer";
@@ -82,126 +88,125 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     div.style.visibility = "visible";
     div.style.fontFamily = "arial,verdana,helvetica";
 
-    div.innerHTML = '\
-            <div id="stereoCanvasdiv" style="" onmouseover="stereoDrawControls(event)" onmousemove="stereoDrawControls(event);" onmouseout="stereoDrawControls(event);" onmouse="stereoDrawControls(event);" onclick="stereoMouseClick(event);" ondblclick="if (stereoiOS) stereoViewerOptionsOpen(!stereoOptVis);" >\
-                <canvas id="stereoCanvas"></canvas>\
-            </div>\
-            <div id="stereoControls" style="z-index:2; position:fixed; background-color:#fff; opacity:.9; padding:16px; margin:0px; border:1px; border-style:solid; border-color:black; visibility:hidden; left:16px; top:16px;\
-                    -moz-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);\
-                    -webkit-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);\
-                    box-shadow: 1px 4px 10px rgba(68,68,68,0.6);\
-                    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30);\
-                    -ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30)";">\
-                <!--input type="button" value="Save As (FF only)" onclick="stereoSaveAs();" /><br /-->\
-                <center>\
-                <input type="button" value="Close Viewer" onclick="stereoViewerClose();" />\
-                <input type="button" value="Help" onclick="stereoHelpOpen();" />\
-                <input type="button" value="?" onclick="stereoAboutOpen();" /></center>\
-                <hr /><br />\
-                <b>Mode:</b><br /><br />\
-                <select onchange="stereoModeChange(0);" id="modeselect">\
-                <option>Right Left (0)</option>\
-                <option>Left Right (1)</option>\
-                <option>Left (2)</option>\
-                <option>Right (3)</option>\
-                <option>Color Anaglyph (4)</option>\
-                <option>Optimized Anaglyph 1 (5)</option>\
-                <option>Optimized Anaglyph 2 (6)</option>\
-                <option>Gray Anaglyph (7)</option>\
-                <option>Half Color Anaglyph (8)</option>\
-                <option>True Anaglyph (9)</option>\
-                <option>Interlaced</option>\
-                <option>Interlaced vertical</option>\
-                </select><br />\
-                <select onchange="stereoGlassesChange();" id="stereoGlasses" />\
-                <option>Red-Cyan glasses</option>\
-                <option>Green-Magenta glasses</option>\
-                </select><br /><br />\
-                <input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoSwap" /> Swap<br /><br />\
-                <input type="button" id="stereoSaveDef" value="Save as Default" onclick="stereoSaveDef();" />\
-                <br /><hr /><br />\
-                <b>Background color:</b><br /><br />\
-                <input type="button" value="White" onclick="stereoBG(2);" />\
-                <input type="button" value="Gray" onclick="stereoBG(1);" />\
-                <input type="button" value="Black" onclick="stereoBG(0);" /><br />\
-                <br /><hr /><br />\
-                <input type="checkbox" value="" onclick="stereoBG(stereoBGcolor);" id="stereoNav" style="visibility:hidden"/><!-- Navigation buttons<br /-->\
-                <input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoCap" /> Show captions<br />\
-            </div>\
-            <div id="stereoHelp" style="z-index:3; position:fixed; background-color:#fff; opacity:.9; padding:16px; margin:0px; border:1px; border-style:solid; border-color:black; visibility:hidden; top:16px; right:16px;\
-                    -moz-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);\
-                    -webkit-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);\
-                    box-shadow: 1px 4px 10px rgba(68,68,68,0.6);\
-                    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30);\
-                    -ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30)";">\
-                Click <b>Right</b> / <b>Left</b> or <b>Center</b> parts of the image<br /> to view <b>Next</b> / <b>Previous</b> images or <b>Options</b>.<br /><br />\
-                <center><b>Keyboard shortcuts:</b></center><br />\
-                <center><table style="border:0"><tr><td><b>Esc&nbsp;&nbsp;</b></td><td> - &nbsp;&nbsp;close Stereo Viewer</tr>\
-                <tr><td><b>Right Arrow&nbsp;&nbsp;</b></td><td> - &nbsp;&nbsp;next image</tr>\
-                <tr><td><b>Left Arrow&nbsp;&nbsp;</b></td><td> - &nbsp;&nbsp;previous image</tr>\
-                <tr><td><b>0..9&nbsp;&nbsp;</b></td><td> - &nbsp;&nbsp;change mode</tr>\
-                <tr><td><b>s&nbsp;&nbsp;</b></td><td> - &nbsp;&nbsp;swap left/right</tr>\
-                </table>\
-                <br /><input type="button" value="OK" onclick="stereoViewerOptionsOpen(false);" /></center>\
-            </div>\
-            <div id="stereoAbout" style="z-index:3; position:fixed; background-color:#fff; opacity:.9; padding:16px; margin:0px; border:1px; border-style:solid; border-color:black; visibility:hidden; top:16px; right:16px;\
-                    -moz-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);\
-                    -webkit-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);\
-                    box-shadow: 1px 4px 10px rgba(68,68,68,0.6);\
-                    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30);\
-                    -ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30)";">\
-                <center><b>HTML5 Stereo Viewer</b><br />\
-                version '+stereover+'<br /><br />\
-                (C) 2011 Yury Golubinsky<br /><br />\
-                <a href="'+stereourl+'">'+stereourl+'</a>\
-                <br /><br /><hr /><br />\
-                <a rel="license" href="http://creativecommons.org/licenses/by/3.0/" title="This work is licensed under a Creative Commons Attribution 3.0 Unported License"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>\
-            </div>';
+    div.innerHTML =
+        '<div id="stereoCanvasdiv" style="" onmouseover="stereoDrawControls(event)" onmousemove="stereoDrawControls(event);" onmouseout="stereoDrawControls(event);" onmouse="stereoDrawControls(event);" onclick="stereoMouseClick(event);" ondblclick="if (stereoiOS) stereoViewerOptionsOpen(!stereoOptVis);" >' +
+            '<canvas id="stereoCanvas"></canvas>' +
+        '</div>' +
+        '<div id="stereoControls" style="z-index:2; position:fixed; background-color:#fff; opacity:.9; padding:16px; margin:0px; border:1px; border-style:solid; border-color:black; visibility:hidden; left:16px; top:16px;' +
+                '-moz-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);' +
+                '-webkit-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);' +
+                'box-shadow: 1px 4px 10px rgba(68,68,68,0.6);' +
+                'filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30);' +
+                '-ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30)";">' +
+            '<!--input type="button" value="Save As (FF only)" onclick="stereoSaveAs();" /><br /-->' +
+            '<center>' +
+            '<input type="button" value="Close Viewer" onclick="stereoViewerClose();" />' +
+            '<input type="button" value="Help" onclick="stereoHelpOpen();" />' +
+            '<input type="button" value="?" onclick="stereoAboutOpen();" /></center>' +
+            '<hr /><br />' +
+            '<b>Mode:</b><br /><br />' +
+            '<select onchange="stereoModeChange(0);" id="modeselect">' +
+            '<option>Right Left (0)</option>' +
+            '<option>Left Right (1)</option>' +
+            '<option>Left (2)</option>' +
+            '<option>Right (3)</option>' +
+            '<option>Color Anaglyph (4)</option>' +
+            '<option>Optimized Anaglyph 1 (5)</option>' +
+            '<option>Optimized Anaglyph 2 (6)</option>' +
+            '<option>Gray Anaglyph (7)</option>' +
+            '<option>Half Color Anaglyph (8)</option>' +
+            '<option>True Anaglyph (9)</option>' +
+            '<option>Interlaced</option>' +
+            '<option>Interlaced vertical</option>' +
+            '</select><br />' +
+            '<select onchange="stereoGlassesChange();" id="stereoGlasses" />' +
+            '<option>Red-Cyan glasses</option>' +
+            '<option>Green-Magenta glasses</option>' +
+            '</select><br /><br />' +
+            '<input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoSwap" /> Swap<br /><br />' +
+            '<input type="button" id="stereoSaveDef" value="Save as Default" onclick="stereoSaveDef();" />' +
+            '<br /><hr /><br />' +
+            '<b>Background color:</b><br /><br />' +
+            '<input type="button" value="White" onclick="stereoBG(2);" />' +
+            '<input type="button" value="Gray" onclick="stereoBG(1);" />' +
+            '<input type="button" value="Black" onclick="stereoBG(0);" /><br />' +
+            '<br /><hr /><br />' +
+            '<input type="checkbox" value="" onclick="stereoBG(stereoBGcolor);" id="stereoNav" style="visibility:hidden"/><!-- Navigation buttons<br /-->' +
+            '<input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoCap" /> Show captions<br />' +
+        '</div>' +
+        '<div id="stereoHelp" style="z-index:3; position:fixed; background-color:#fff; opacity:.9; padding:16px; margin:0px; border:1px; border-style:solid; border-color:black; visibility:hidden; top:16px; right:16px;' +
+                '-moz-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);' +
+                '-webkit-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);' +
+                'box-shadow: 1px 4px 10px rgba(68,68,68,0.6);' +
+                'filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30);' +
+                '-ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30)";">' +
+            'Click <b>Right</b> / <b>Left</b> or <b>Center</b> parts of the image<br /> to view <b>Next</b> / <b>Previous</b> images or <b>Options</b>.<br /><br />' +
+            '<center><b>Keyboard shortcuts:</b></center><br />' +
+            '<center><table style="border:0"><tr><td><b>Esc&nbsp;&nbsp;</b></td><td> - &nbsp;&nbsp;close Stereo Viewer</tr>' +
+            '<tr><td><b>Right Arrow&nbsp;&nbsp;</b></td><td> - &nbsp;&nbsp;next image</tr>' +
+            '<tr><td><b>Left Arrow&nbsp;&nbsp;</b></td><td> - &nbsp;&nbsp;previous image</tr>' +
+            '<tr><td><b>0..9&nbsp;&nbsp;</b></td><td> - &nbsp;&nbsp;change mode</tr>' +
+            '<tr><td><b>s&nbsp;&nbsp;</b></td><td> - &nbsp;&nbsp;swap left/right</tr>' +
+            '</table>' +
+            '<br /><input type="button" value="OK" onclick="stereoViewerOptionsOpen(false);" /></center>' +
+        '</div>' +
+        '<div id="stereoAbout" style="z-index:3; position:fixed; background-color:#fff; opacity:.9; padding:16px; margin:0px; border:1px; border-style:solid; border-color:black; visibility:hidden; top:16px; right:16px;' +
+                '-moz-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);' +
+                '-webkit-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);' +
+                'box-shadow: 1px 4px 10px rgba(68,68,68,0.6);' +
+                'filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30);' +
+                '-ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30)";">' +
+            '<center><b>HTML5 Stereo Viewer</b><br />' +
+            'version '+stereover+'<br /><br />' +
+            '(C) 2011 Yury Golubinsky<br /><br />' +
+            '<a href="'+stereourl+'">'+stereourl+'</a>' +
+            '<br /><br /><hr /><br />' +
+            '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/" title="This work is licensed under a Creative Commons Attribution 3.0 Unported License"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>' +
+        '</div>';
 
     document.body.insertBefore(div, document.body.firstChild);
 
-    if (stereoiOS & !stereoiOS_iPad) {
-        document.getElementById("stereoControls").innerHTML = '\
-            <center><input type="button" value="Hide Options" onclick="stereoViewerOptionsOpen(false);" />\
-            <input type="button" value="Close Viewer" onclick="stereoViewerClose();" /></center>\
-            <hr />\
-            <b>Mode:</b><br />\
-            <select onchange="stereoModeChange(0);" id="modeselect">\
-            <option>Right Left</option>\
-            <option>Left Right</option>\
-            <option>Left</option>\
-            <option>Right</option>\
-            <option>Color Anaglyph</option>\
-            <option>Optimized Anaglyph 1</option>\
-            <option>Optimized Anaglyph 2</option>\
-            <option>Gray Anaglyph</option>\
-            <option>Half Color Anaglyph</option>\
-            <option>True Anaglyph</option>\
-            <option>Interlaced</option>\
-            <option>Interlaced vertical</option>\
-            </select><br />\
-            <select onchange="stereoGlassesChange();" id="stereoGlasses" />\
-            <option>Red-Cyan glasses</option>\
-            <option>Green-Magenta glasses</option>\
-            </select><br />\
-            <input type="checkbox" value="" onclick="stereoBG(stereoBGcolor);" id="stereoNav" style="visibility:hidden"/>\
-            <input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoSwap" /> Swap<br />\
-            <input type="button" id="stereoSaveDef" value="Save as Default" onclick="stereoSaveDef();" />\
-            <hr />\
-            <b>Background color:</b><br />\
-            <input type="button" value="White" onclick="stereoBG(2);" />\
-            <input type="button" value="Gray" onclick="stereoBG(1);" />\
-            <input type="button" value="Black" onclick="stereoBG(0);" /><br />\
-            <br />\
-            <input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoCap" /> Show captions<br />\
-            <hr />\
-                <center><b>HTML5 Stereo Viewer '+stereover+'</b><br />\
-                (C) 2011 Yury Golubinsky<br />\
-                <a href="'+stereourl+'">'+stereourlvis+'</a>\
-                <br /><br />\
-                <a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>\
-            '
-    };
+    if (stereoiOS && !stereoiOS_iPad) {
+        document.getElementById("stereoControls").innerHTML =
+            '<center><input type="button" value="Hide Options" onclick="stereoViewerOptionsOpen(false);" />' +
+            '<input type="button" value="Close Viewer" onclick="stereoViewerClose();" /></center>' +
+            '<hr />' +
+            '<b>Mode:</b><br />' +
+            '<select onchange="stereoModeChange(0);" id="modeselect">' +
+            '<option>Right Left</option>' +
+            '<option>Left Right</option>' +
+            '<option>Left</option>' +
+            '<option>Right</option>' +
+            '<option>Color Anaglyph</option>' +
+            '<option>Optimized Anaglyph 1</option>' +
+            '<option>Optimized Anaglyph 2</option>' +
+            '<option>Gray Anaglyph</option>' +
+            '<option>Half Color Anaglyph</option>' +
+            '<option>True Anaglyph</option>' +
+            '<option>Interlaced</option>' +
+            '<option>Interlaced vertical</option>' +
+            '</select><br />' +
+            '<select onchange="stereoGlassesChange();" id="stereoGlasses" />' +
+            '<option>Red-Cyan glasses</option>' +
+            '<option>Green-Magenta glasses</option>' +
+            '</select><br />' +
+            '<input type="checkbox" value="" onclick="stereoBG(stereoBGcolor);" id="stereoNav" style="visibility:hidden"/>' +
+            '<input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoSwap" /> Swap<br />' +
+            '<input type="button" id="stereoSaveDef" value="Save as Default" onclick="stereoSaveDef();" />' +
+            '<hr />' +
+            '<b>Background color:</b><br />' +
+            '<input type="button" value="White" onclick="stereoBG(2);" />' +
+            '<input type="button" value="Gray" onclick="stereoBG(1);" />' +
+            '<input type="button" value="Black" onclick="stereoBG(0);" /><br />' +
+            '<br />' +
+            '<input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoCap" /> Show captions<br />' +
+            '<hr />' +
+                '<center><b>HTML5 Stereo Viewer '+stereover+'</b><br />' +
+                '(C) 2011 Yury Golubinsky<br />' +
+                '<a href="'+stereourl+'">'+stereourlvis+'</a>' +
+                '<br /><br />' +
+                '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>';
+    }
 
     document.body.onkeyup = function(event){stereoKeyPress(event);};
     document.body.onmousewheel = function(event){stereoViewerClose(event);};
@@ -225,11 +230,11 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
 
     stereoCheckCookie();
     var sm = stereoGetCookie();
-    if ((sm >= 0) && (sm <= stereoModes)) {
+    if (sm >= 0 && sm <= stereoModes) {
         stereoMode = sm;
         stereoSwap = stereoGetCookieSwap() > 0;
         stereoGlasses = stereoGetCookieGlasses();
-    };
+    }
 
     for (var i = 0; i <= stereoModes; i++)
         document.getElementById("modeselect").options[i].selected = stereoMode == i;
@@ -252,20 +257,20 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
                 document.getElementsByTagName("head")[0].replaceChild(meta, document.getElementsByTagName("head")[0].childNodes[i]);
                 b = true;
                 break;
-            };
+            }
         if (!b)
             document.getElementsByTagName("head")[0].appendChild(meta);
-    };
+    }
 
     stereoCountImages();
     stereoDrawImage();
 
     stereoGetCookieForFirstTimeHelpDisplayed();
-    if (stereoFirstTimeHelpDisplayed & !stereoiOS_iPhone) {
+    if (stereoFirstTimeHelpDisplayed && !stereoiOS_iPhone) {
         stereoHelpOpen();
         stereoSetCookieForFirstTimeHelpDisplayed();
     }
-};
+}
 
 function stereoViewerClose() {
     stereoViewerOptionsOpen(false);
@@ -280,8 +285,8 @@ function stereoViewerClose() {
                 document.getElementsByTagName("head")[0].replaceChild(meta, document.getElementsByTagName("head")[0].childNodes[i]);
                 break;
             }
-    };
-};
+    }
+}
 
 function setPixel(imageData, x, y, r, g, b, a) {
     var index = (x + y * imageData.width) * 4;
@@ -289,7 +294,7 @@ function setPixel(imageData, x, y, r, g, b, a) {
     imageData.data[index++] = g;
     imageData.data[index++] = b;
     imageData.data[index++] = a;
-};
+}
 
 function stereoMouseClick(event) {
 
@@ -304,7 +309,7 @@ function stereoMouseClick(event) {
     else if (event.clientX || event.clientY) {
         mx = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
         my = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-    };
+    }
 
     var b = false;
     var cnvs = document.getElementById('stereoCanvas');
@@ -317,8 +322,8 @@ function stereoMouseClick(event) {
         if (mx >= 2 * cnvs.width / 3) {     //right
             stereoNextImage();
             b = true;
-        };
-    /*}
+        }
+    //}
     /*else //buttons
         if (stereoNav > 0) {
             if ((mx >= 0) && (mx < stereoNav) && (my >= 0) && (my < cnvs.height)) {  //left
@@ -330,11 +335,11 @@ function stereoMouseClick(event) {
                 stereoNextImage();
                 b = true;
             }
-        };*/
+        }*/
     if (!b) {    //center
         stereoViewerOptionsOpen(!stereoOptVis);
     }
-};
+}
 
 function stereoViewerOptionsOpen(value) {
     if (value)
@@ -345,9 +350,9 @@ function stereoViewerOptionsOpen(value) {
     if (!value) {
         document.getElementById("stereoHelp").style.visibility = s;
         document.getElementById("stereoAbout").style.visibility = s
-    };
+    }
     stereoOptVis = value
-};
+}
 
 function stereoHelpOpen(value) {
     if (document.getElementById("stereoHelp").style.visibility == "hidden")
@@ -356,7 +361,7 @@ function stereoHelpOpen(value) {
         var s = "hidden";
     document.getElementById("stereoHelp").style.visibility = s;
     document.getElementById("stereoAbout").style.visibility = "hidden";
-};
+}
 
 function stereoAboutOpen(value) {
     if (document.getElementById("stereoAbout").style.visibility == "hidden")
@@ -365,7 +370,7 @@ function stereoAboutOpen(value) {
         var s = "hidden";
     document.getElementById("stereoAbout").style.visibility = s;
     document.getElementById("stereoHelp").style.visibility = "hidden";
-};
+}
 
 function stereoDrawControls(event) {
 
@@ -380,7 +385,7 @@ function stereoDrawControls(event) {
     else if (event.clientX || event.clientY) {
         mx = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
         my = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-    };
+    }
 
     function _draw(color1, color2, color11, color22) {
         ctx.fillStyle = color1;
@@ -404,7 +409,7 @@ function stereoDrawControls(event) {
         ctx.lineTo(cnvs.width - 2 * stereoNav / 3, cnvs.height / 2 - stereoNav / 3);
         ctx.lineTo(cnvs.width - stereoNav / 3, cnvs.height / 2);
         ctx.fill();
-    };
+    }
 
     if (stereoNav > 0) {
         var cnvs = document.getElementById('stereoCanvas');
@@ -428,7 +433,7 @@ function stereoDrawControls(event) {
                 var color2 = "rgba(220, 220, 220, 1.0)";
                 var color11 = "rgba(255, 255, 255, 1.0)";
                 var color22 = "rgba(240, 240, 240, 1.0)";
-        };
+        }
 
         if ((mx >= 0) && (mx < stereoNav) && (my >= 0) && (my < cnvs.height)) {  //left
             if (stereoMouse != 0) {
@@ -449,7 +454,7 @@ function stereoDrawControls(event) {
             stereoMouse = 1;
         }
     }
-};
+}
 
 function stereoDrawImage() {
 
@@ -472,10 +477,10 @@ function stereoDrawImage() {
         else {
             imw = cnvswidth - stereoNav * 2;
             imh = imw * (img.height / img.width) * 2;
-        };
+        }
         imw = Math.round(imw);
         imh = Math.round(imh);
-    };
+    }
 
     function prepareWH2i() {
         if (((cnvswidth - stereoNav * 2) / (cnvsheight - mc)) >= (img.width / img.height / 2)) {
@@ -485,10 +490,10 @@ function stereoDrawImage() {
         else {
             imw = cnvswidth - stereoNav * 2;
             imh = imw * (img.height / img.width);
-        };
+        }
         imw = Math.round(imw);
         imh = Math.round(imh);
-    };
+    }
 
     function prepareWH2iv() {
         if (((cnvswidth - stereoNav * 2) / (cnvsheight - mc)) >= (img.width / img.height / 2)) {
@@ -498,10 +503,10 @@ function stereoDrawImage() {
         else {
             imw = cnvswidth - stereoNav * 2;
             imh = imw * (img.height / img.width) * 2;
-        };
+        }
         imw = Math.round(imw / 2);
         imh = Math.round(imh);
-    };
+    }
 
     function prepareWH() {
         if (((cnvswidth - stereoNav * 2) / (cnvsheight - mc)) >= (img.width / img.height)) {
@@ -511,10 +516,10 @@ function stereoDrawImage() {
         else {
             imw = cnvswidth - stereoNav * 2;
             imh = imw * (img.height / img.width);
-        };
+        }
         imw = Math.round(imw);
         imh = Math.round(imh);
-    };
+    }
 
     var cnvs = document.getElementById('stereoCanvas');
     var ctx = cnvs.getContext('2d');
@@ -545,7 +550,7 @@ function stereoDrawImage() {
             break;
         case 2:
             ctx.fillStyle = "rgba(255, 255, 255, 1)";
-    };
+    }
     ctx.fillRect(stereoNav, 0, cnvswidth - stereoNav * 2, cnvsheight);
     document.getElementById("stereoViewer").style.backgroundColor = ctx.fillStyle;
 
@@ -588,8 +593,8 @@ function stereoDrawImage() {
                         if (((cnvswidth - imw * 2) / 2) % 2 == 0)
                             ssw = !ssw;
                         break;
-                };
-            };
+                }
+            }
 
             if (!ssw) {
                 iData1 = bufctx.getImageData(0, 0, imw, imh);
@@ -599,7 +604,7 @@ function stereoDrawImage() {
                 iData2 = bufctx.getImageData(0, 0, imw, imh);
                 iData1 = bufctx.getImageData(imw, 0, imw, imh)
             }
-        };
+        }
 
         function _getLines(phrase, maxPxLength) {
             var phraseArray = [];
@@ -616,15 +621,15 @@ function stereoDrawImage() {
                     else {
                         phraseArray.push(lastPhrase);
                         lastPhrase = w;
-                    };
+                    }
                     if (i === wa.length - 1) {
                         phraseArray.push(lastPhrase);
                         break;
-                    };
-                };
-            };
+                    }
+                }
+            }
             return phraseArray;
-        };
+        }
 
         function _drawText(num) {
 
@@ -641,7 +646,7 @@ function stereoDrawImage() {
                         break;
                     case 2:
                         ctx.fillStyle = "rgba(128, 128, 128, 1)";
-                };
+                }
                 var h = ctx.measureText("Wg").width;
                 if (num == 1) {
                     var s = _getLines(imagesC[imageN], cnvswidth - 36);
@@ -656,7 +661,7 @@ function stereoDrawImage() {
                     }
                 }
             }
-        };
+        }
 
         switch (imagesT[imageN]) {
             case "flat":
@@ -669,7 +674,7 @@ function stereoDrawImage() {
                 stereoMode_ = stereoMode;
                 stereoSwap_ = stereoSwap;
                 break;
-        };
+        }
 
         if (stereoIE) {
             ctx.font = "bold 12px sans-serif";
@@ -684,7 +689,7 @@ function stereoDrawImage() {
                     break;
                 case 2:
                     ctx.fillStyle = "rgba(255, 128, 128, 1)";
-            };
+            }
             ctx.fillText("Internet Explorer is not supported in this version", cnvswidth / 2, cnvsheight / 2);
             switch (stereoBGcolor) {
                 case 0:
@@ -695,7 +700,7 @@ function stereoDrawImage() {
                     break;
                 case 2:
                     ctx.fillStyle = "rgba(128, 128, 128, 1)";
-            };
+            }
             var h = ctx.measureText("Wg").width;
             ctx.fillText("Press Esc to close the slideshow", cnvswidth / 2, cnvsheight / 2 + h * 2);
             ctx.fillText("Please use Safari, Chrome, Firefox or Opera", cnvswidth / 2, cnvsheight / 2 + h * 3);
@@ -715,7 +720,7 @@ function stereoDrawImage() {
                     break;
                 case 2:
                     ctx.fillStyle = "rgba(128, 128, 128, 1)";
-            };
+            }
             ctx.fillText("Loading...", cnvswidth / 2, cnvsheight / 2)
         }
         else
@@ -734,8 +739,8 @@ function stereoDrawImage() {
                                             (cnvswidth - imw) / 2 + imw / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh);
                         ctx.drawImage(img, img.width / 2, 0, img.width / 2, img.height,
                                             (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh)
-                    };
-                    if ((imagesT[imageN] == "flat") | (imagesT[imageN] == "anaglyph"))
+                    }
+                    if ((imagesT[imageN] == "flat") || (imagesT[imageN] == "anaglyph"))
                         _drawText(1)
                     else
                         _drawText(2);
@@ -786,7 +791,7 @@ function stereoDrawImage() {
                         imageData.data[index] = idg.data[index++];
                         imageData.data[index] = idb.data[index++];
                         imageData.data[index] = 0xFF; index++;
-                    };
+                    }
 
                     ctx.putImageData(imageData, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2);
                     _drawText(1);
@@ -815,7 +820,7 @@ function stereoDrawImage() {
                         imageData.data[index++] = g;
                         imageData.data[index++] = b;
                         imageData.data[index++] = 0xFF;
-                    };
+                    }
 
                     ctx.putImageData(imageData, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2);
                     _drawText(1);
@@ -849,7 +854,7 @@ function stereoDrawImage() {
                         imageData.data[index++] = g;
                         imageData.data[index++] = b;
                         imageData.data[index++] = 0xFF;
-                    };
+                    }
 
                     ctx.putImageData(imageData, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2);
                     _drawText(1);
@@ -880,7 +885,7 @@ function stereoDrawImage() {
                         imageData.data[index++] = g;
                         imageData.data[index++] = b;
                         imageData.data[index++] = 0xFF;
-                    };
+                    }
 
                     ctx.putImageData(imageData, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2);
                     _drawText(1);
@@ -909,7 +914,7 @@ function stereoDrawImage() {
                         imageData.data[index++] = g;
                         imageData.data[index++] = b;
                         imageData.data[index++] = 0xFF;
-                    };
+                    }
 
                     ctx.putImageData(imageData, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2);
                     _drawText(1);
@@ -944,7 +949,7 @@ function stereoDrawImage() {
                         imageData.data[index++] = g;
                         imageData.data[index++] = b;
                         imageData.data[index++] = 0xFF;
-                    };
+                    }
 
                     ctx.putImageData(imageData, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2);
                     _drawText(1);
@@ -967,10 +972,10 @@ function stereoDrawImage() {
                             imageData.data[index2_++] = iData2.data[index2++];
                             imageData.data[index2_++] = iData2.data[index2++];
                             imageData.data[index2_++] = 0xFF; index2++;
-                        };
+                        }
                         index1_ = index1_ + indexy;
                         index2_ = index2_ + indexy;
-                    };
+                    }
 
                     imh = imh * 2;
                     ctx.putImageData(imageData, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2);
@@ -992,7 +997,7 @@ function stereoDrawImage() {
                         imageData.data[index1_++] = iData2.data[index2++];
                         imageData.data[index1_++] = iData2.data[index2++];
                         imageData.data[index1_++] = 0xFF; index2++;
-                    };
+                    }
 
                     imw = imw * 2;
                     ctx.putImageData(imageData, (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2);
@@ -1013,12 +1018,12 @@ function stereoDrawImage() {
                 break;
             case 2:
                 ctx.fillStyle = "rgba(128, 128, 128, 1)";
-        };
+        }
         ctx.fillText("No stereo images", cnvswidth / 2, cnvsheight / 2)
-    };
+    }
     ///////////////////////////////////
     stereoDrawControls();
-};
+}
 
 function stereoCountImages() {
     function getClassName(obj, c) {
@@ -1031,7 +1036,7 @@ function stereoCountImages() {
             }
         }
         return "";
-    };
+    }
 
     var j, n = 0;
     for (j = 0; j < document.images.length; j++) {
@@ -1046,25 +1051,25 @@ function stereoCountImages() {
                 var img = new Image;
                 img.src = images[n];
                 img.onload = stereoDrawImage;
-            };
+            }
             n++;
         }
-    };
+    }
     imagesN = 0;
-};
+}
 
 function stereoPrevImage() {
     if (imageN > 0) imageN--
     else imageN = images.length - 1;
     if (imageN < 0) imageN = 0;
     stereoDrawImage()
-};
+}
 
 function stereoNextImage() {
     if (imageN < images.length - 1)    imageN++
     else imageN = 0;
     stereoDrawImage()
-};
+}
 
 function stereoModeChange(value) {
     var elmnt = document.getElementById("modeselect");
@@ -1072,14 +1077,14 @@ function stereoModeChange(value) {
         if (elmnt.options[i].selected) {
             stereoMode = i;
             break;
-        };
+        }
     stereoSwap = document.getElementById("stereoSwap").checked;
     stereoCaption = document.getElementById("stereoCap").checked;
 
     stereoCorrectAfterMode();
 
     stereoDrawImage()
-};
+}
 
 function stereoGlassesChange() {
     var elmnt = document.getElementById("stereoGlasses");
@@ -1087,9 +1092,9 @@ function stereoGlassesChange() {
         if (elmnt.options[i].selected) {
             stereoGlasses = i;
             break;
-        };
+        }
     stereoDrawImage()
-};
+}
 
 function stereoKeyPress(e) {
     var keynum;
@@ -1110,7 +1115,7 @@ function stereoKeyPress(e) {
 
         stereoCorrectAfterMode();
 
-    };
+    }
 
     switch (keynum) {
         // Controls
@@ -1149,7 +1154,7 @@ function stereoKeyPress(e) {
             _mode(keynum - 48);
             break;
     }
-};
+}
 
 function stereoSaveAs() {
     var canvas = document.getElementById("canvas");
@@ -1158,11 +1163,11 @@ function stereoSaveAs() {
     var newImg = document.createElement("img");
     newImg.src = f.toDataURL();
     document.body.appendChild(newImg);
-};
+}
 
 function stereoBG(c) {
     stereoBGcolor = c;
-    if (document.getElementById("stereoNav").checked & !stereoiOS)
+    if (document.getElementById("stereoNav").checked && !stereoiOS)
         stereoNav = stereoNavDef
     else
         stereoNav = 0;
@@ -1170,7 +1175,7 @@ function stereoBG(c) {
 
     stereoDrawImage();
     stereoDrawControls()
-};
+}
 
 function stereoSaveDef() {
     if (stereoGetCookie() < 0)
@@ -1178,7 +1183,7 @@ function stereoSaveDef() {
     else
         stereoSetCookie(-1, stereoSwap ? 1 : 0, 0);
     stereoCheckCookie();
-};
+}
 
 function stereoCheckCookie() {
     var sm = stereoGetCookie();
@@ -1188,17 +1193,17 @@ function stereoCheckCookie() {
         document.getElementById("stereoSaveDef").value = "Save as Default";
     document.getElementById("stereoSwap").checked = stereoGetCookieSwap() > 0;
     //document.getElementById("stereoGlasses").checked = stereoGetCookieGlasses();
-};
+}
 
 function stereoSetCookie(m, s, gm) {
     document.cookie = "HTML5_STEREO_VIEWER=" + escape(m.toString()) + "; path=/";
     document.cookie = "HTML5_STEREO_VIEWER_SWAP=" + escape(s.toString()) + "; path=/";
     document.cookie = "HTML5_STEREO_VIEWER_GLASSES=" + escape(gm.toString()) + "; path=/";
-};
+}
 
 function stereoSetCookieForFirstTimeHelpDisplayed() {
     document.cookie = "HTML5_STEREO_VIEWER_FIRST_TIME_HELP_DISPLAYED=YES" + "; path=/";
-};
+}
 
 function stereoGetCookieForFirstTimeHelpDisplayed() {
     stereoFirstTimeHelpDisplayed = true;
@@ -1209,7 +1214,7 @@ function stereoGetCookieForFirstTimeHelpDisplayed() {
             return stereoFirstTimeHelpDisplayed;
             }
     return stereoFirstTimeHelpDisplayed;
-};
+}
 
 function stereoGetCookie() {
     var a = document.cookie.split(";");
@@ -1217,7 +1222,7 @@ function stereoGetCookie() {
         if (a[i].substr(0,a[i].indexOf("=")).trim() == "HTML5_STEREO_VIEWER")
             return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)));
     return -1;
-};
+}
 
 function stereoGetCookieSwap() {
     var a = document.cookie.split(";");
@@ -1225,7 +1230,7 @@ function stereoGetCookieSwap() {
         if (a[i].substr(0,a[i].indexOf("=")).trim() == "HTML5_STEREO_VIEWER_SWAP")
             return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)));
     return false;
-};
+}
 
 function stereoGetCookieGlasses() {
     var a = document.cookie.split(";");
@@ -1233,10 +1238,10 @@ function stereoGetCookieGlasses() {
         if (a[i].substr(0,a[i].indexOf("=")).trim() == "HTML5_STEREO_VIEWER_GLASSES")
             return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)));
     return false;
-};
+}
 
 function stereoCorrectAfterMode() {
-    if ((stereoMode <= (stereoModes - 2)) & (stereoMode >= 4)) {
+    if ((stereoMode <= (stereoModes - 2)) && (stereoMode >= 4)) {
         document.getElementById("stereoGlasses").style.visibility = "inherit";
     } else {
         document.getElementById("stereoGlasses").style.visibility = "hidden";
