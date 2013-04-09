@@ -1,15 +1,5 @@
-/*!
-HTML5 Stereo Viewer
-
-Version 2.0.0-dev
-
-Copyright (C) 2013 Yury Golubinsky, Bill Bryant
-
-This work is licensed under the
-Creative Commons Attribution 3.0 Unported License.
-To view a copy of this license,
-visit http://creativecommons.org/licenses/by/3.0/
-*/
+/*! HTML5 Stereo Viewer v2.0.0-dev | https://github.com/wjbryant/HTML5-Stereo-Viewer
+Copyright (c) 2013 Yury Golubinsky, Bill Bryant | http://creativecommons.org/licenses/by/3.0/ */
 
 var stereover = "2.0.0-dev",
     images = [],
@@ -38,16 +28,15 @@ var stereover = "2.0.0-dev",
     sGlassesGreenMagenta = 1,
     stereoFirstTimeHelpDisplayed = true;
 
+/**
+ * Mode       - stereo mode (0..9...). Default: 5
+ * Swap       - swap left and right sides (true, false). Default: false
+ * BGColor    - backgroung color (0,1,2) for Black, Gray and White. Default: 0
+ * Caption    - show captions (true, false). Default: true
+ * CaptionSrc - caption text source name ("alt", "title"). Default: "alt"
+ * Type       - default stereo images type ("anaglyph", "flat", "stereoLR", "stereoRL", ""), for images with class="stereo". The value "" corresponds to "stereoRL"
+ */
 function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
-    /*
-    Mode       - stereo mode (0..9...). Default: 5
-    Swap       - swap left and right sides (true, false). Default: false
-    BGColor    - backgroung color (0,1,2) for Black, Gray and White. Default: 0
-    Caption    - show captions (true, false). Default: true
-    CaptionSrc - caption text source name ("alt", "title"). Default: "alt"
-    Type       - default stereo images type ("anaglyph", "flat", "stereoLR", "stereoRL", ""), for images with class="stereo". The value "" corresponds to "stereoRL"
-    */
-
     var i;
 
     if (Caption) {
@@ -69,6 +58,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     stereoiOS_iPhone = (navigator.appVersion.indexOf("iPhone") !== -1) || (navigator.appVersion.indexOf("iPod") !== -1);
     stereoiOS_iPad = (navigator.appVersion.indexOf("iPad") !== -1);
     stereoiOS = stereoiOS_iPad || stereoiOS_iPhone;
+
     if (stereoiOS) {
         stereoNav = 0;
     }
@@ -204,7 +194,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
             '<input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoCap" /> Show captions<br />' +
             '<hr />' +
                 '<center><b>HTML5 Stereo Viewer '+stereover+'</b><br />' +
-                '(C) 2011 Yury Golubinsky<br />' +
+                '(C) 2013 Yury Golubinsky, Bill Bryant<br />' +
                 '<a href="'+stereourl+'">'+stereourlvis+'</a>' +
                 '<br /><br />' +
                 '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>';
@@ -335,11 +325,11 @@ function stereoMouseClick(event) {
     /*
     // buttons
     else if (stereoNav > 0) {
-        if ((mx >= 0) && (mx < stereoNav) && (my >= 0) && (my < cnvs.height)) { // left
+        if (mx >= 0 && mx < stereoNav && my >= 0 && my < cnvs.height) { // left
             stereoPrevImage();
             b = true;
         }
-        else if ((mx >= cnvs.width - stereoNav) && (mx < cnvs.width) && (my >= 0) && (my < cnvs.height)) { // right
+        else if (mx >= cnvs.width - stereoNav && mx < cnvs.width && my >= 0 && my < cnvs.height) { // right
             stereoNextImage();
             b = true;
         }
@@ -352,18 +342,15 @@ function stereoMouseClick(event) {
 }
 
 function stereoViewerOptionsOpen(value) {
-    var s;
-    if (value) {
-        s = "visible";
-    }
-    else {
-        s = "hidden";
-    }
+    var s = value ? "visible" : "hidden";
+
     document.getElementById("stereoControls").style.visibility = s;
+
     if (!value) {
         document.getElementById("stereoHelp").style.visibility = s;
         document.getElementById("stereoAbout").style.visibility = s;
     }
+
     stereoOptVis = value;
 }
 
@@ -461,13 +448,13 @@ function stereoDrawControls(event) {
                 color22 = "rgba(240, 240, 240, 1.0)";
         }
 
-        if ((mx >= 0) && (mx < stereoNav) && (my >= 0) && (my < cnvs.height)) { // left
+        if (mx >= 0 && mx < stereoNav && my >= 0 && my < cnvs.height) { // left
             if (stereoMouse !== 0) {
                 _draw(color1, color2, color11, color22);
                 stereoMouse = 0;
             }
         }
-        else if ((mx >= cnvs.width - stereoNav) && (mx < cnvs.width) && (my >= 0) && (my < cnvs.height)) { // right
+        else if (mx >= cnvs.width - stereoNav && mx < cnvs.width && my >= 0 && my < cnvs.height) { // right
             if (stereoMouse !== 2) {
                 _draw(color2, color1, color22, color11);
                 stereoMouse = 2;
@@ -488,7 +475,7 @@ function stereoDrawImage() {
         stereoSwap_ = stereoSwap;
 
     function prepareWH2() {
-        if (((cnvswidth - stereoNav * 2) / (cnvsheight - mc)) >= (img.width / img.height / 2)) {
+        if ((cnvswidth - stereoNav * 2) / (cnvsheight - mc) >= img.width / img.height / 2) {
             imh = cnvsheight - mc;
             imw = imh * (img.width / img.height) / 2;
         }
@@ -501,7 +488,7 @@ function stereoDrawImage() {
     }
 
     function prepareWH2i() {
-        if (((cnvswidth - stereoNav * 2) / (cnvsheight - mc)) >= (img.width / img.height / 2)) {
+        if ((cnvswidth - stereoNav * 2) / (cnvsheight - mc) >= img.width / img.height / 2) {
             imh = (cnvsheight - mc) / 2;
             imw = (cnvsheight - mc) * (img.width / img.height) / 2;
         }
@@ -514,7 +501,7 @@ function stereoDrawImage() {
     }
 
     function prepareWH2iv() {
-        if (((cnvswidth - stereoNav * 2) / (cnvsheight - mc)) >= (img.width / img.height / 2)) {
+        if ((cnvswidth - stereoNav * 2) / (cnvsheight - mc) >= img.width / img.height / 2) {
             imh = cnvsheight - mc;
             imw = imh * (img.width / img.height) / 2;
         }
@@ -527,7 +514,7 @@ function stereoDrawImage() {
     }
 
     function prepareWH() {
-        if (((cnvswidth - stereoNav * 2) / (cnvsheight - mc)) >= (img.width / img.height)) {
+        if ((cnvswidth - stereoNav * 2) / (cnvsheight - mc) >= img.width / img.height) {
             imh = cnvsheight - mc;
             imw = imh * (img.width / img.height);
         }
@@ -677,7 +664,7 @@ function stereoDrawImage() {
             } else {
                 s = _getLines(imagesC[imageN], imw / 2 - 36);
                 for (i = 0; i < s.length; i++) {
-                    var e = ctx.measureText(s[i]).height;
+                    //var e = ctx.measureText(s[i]).height;
                     ctx.fillText(s[i], (cnvswidth - imw) / 2 + imw / 4, cnvsheight / 2 + imh / 2 + i * h);
                     ctx.fillText(s[i], cnvswidth / 2 + imw / 4, cnvsheight / 2 + imh / 2 + i * h);
                 }
@@ -770,11 +757,11 @@ function stereoDrawImage() {
                     }
                     else {
                         ctx.drawImage(img, 0, 0, img.width / 2, img.height,
-                                            (cnvswidth - imw) / 2 + imw / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh);
+                            (cnvswidth - imw) / 2 + imw / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh);
                         ctx.drawImage(img, img.width / 2, 0, img.width / 2, img.height,
-                                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh);
+                            (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh);
                     }
-                    if ((imagesT[imageN] === "flat") || (imagesT[imageN] === "anaglyph")) {
+                    if (imagesT[imageN] === "flat" || imagesT[imageN] === "anaglyph") {
                         _drawText(1);
                     }
                     else {
@@ -1276,7 +1263,7 @@ function stereoGetCookieForFirstTimeHelpDisplayed() {
     var a = document.cookie.split(";");
     for (var i = 0; i < a.length; i++) {
         if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_FIRST_TIME_HELP_DISPLAYED") {
-            stereoFirstTimeHelpDisplayed = (unescape(a[i].substr(a[i].indexOf("=")+1)) !== "YES");
+            stereoFirstTimeHelpDisplayed = unescape(a[i].substr(a[i].indexOf("=")+1) !== "YES");
             return stereoFirstTimeHelpDisplayed;
         }
     }
