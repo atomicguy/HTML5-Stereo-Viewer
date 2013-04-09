@@ -115,7 +115,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
             '<option>Red-Cyan glasses</option>' +
             '<option>Green-Magenta glasses</option>' +
             '</select><br /><br />' +
-            '<input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoSwap" /> Swap<br /><br />' +
+            '<label><input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoSwap" /> Swap</label><br /><br />' +
             '<input type="button" id="stereoSaveDef" value="Save as Default" onclick="stereoSaveDef();" />' +
             '<br /><hr /><br />' +
             '<b>Background color:</b><br /><br />' +
@@ -124,7 +124,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
             '<input type="button" value="Black" onclick="stereoBG(0);" /><br />' +
             '<br /><hr /><br />' +
             '<input type="checkbox" value="" onclick="stereoBG(stereoBGcolor);" id="stereoNav" style="visibility:hidden"/><!-- Navigation buttons<br /-->' +
-            '<input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoCap" /> Show captions<br />' +
+            '<label><input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoCap" /> Show captions</label><br />' +
         '</div>' +
         '<div id="stereoHelp" style="z-index:3; position:fixed; background-color:#fff; opacity:.9; padding:16px; margin:0px; border:1px; border-style:solid; border-color:black; visibility:hidden; top:16px; right:16px;' +
                 '-moz-box-shadow: 1px 4px 10px rgba(68,68,68,0.6);' +
@@ -150,7 +150,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
                 '-ms-filter: "progid:DXImageTransform.Microsoft.Blur(PixelRadius=3,MakeShadow=true,ShadowOpacity=0.30)";">' +
             '<center><b>HTML5 Stereo Viewer</b><br />' +
             'version '+stereover+'<br /><br />' +
-            '(C) 2011 Yury Golubinsky<br /><br />' +
+            '(C) 2013 Yury Golubinsky, Bill Bryant<br /><br />' +
             '<a href="'+stereourl+'">'+stereourl+'</a>' +
             '<br /><br /><hr /><br />' +
             '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/" title="This work is licensed under a Creative Commons Attribution 3.0 Unported License"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>' +
@@ -183,7 +183,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
             '<option>Green-Magenta glasses</option>' +
             '</select><br />' +
             '<input type="checkbox" value="" onclick="stereoBG(stereoBGcolor);" id="stereoNav" style="visibility:hidden"/>' +
-            '<input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoSwap" /> Swap<br />' +
+            '<label><input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoSwap" /> Swap</label><br />' +
             '<input type="button" id="stereoSaveDef" value="Save as Default" onclick="stereoSaveDef();" />' +
             '<hr />' +
             '<b>Background color:</b><br />' +
@@ -191,7 +191,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
             '<input type="button" value="Gray" onclick="stereoBG(1);" />' +
             '<input type="button" value="Black" onclick="stereoBG(0);" /><br />' +
             '<br />' +
-            '<input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoCap" /> Show captions<br />' +
+            '<label><input type="checkbox" value="" onclick="stereoModeChange(stereoMode);" id="stereoCap" /> Show captions</label><br />' +
             '<hr />' +
                 '<center><b>HTML5 Stereo Viewer '+stereover+'</b><br />' +
                 '(C) 2013 Yury Golubinsky, Bill Bryant<br />' +
@@ -203,7 +203,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     document.body.onkeyup = function (event) { stereoKeyPress(event); };
     document.body.onmousewheel = function (event) { stereoViewerClose(event); };
     document.body.onscroll = function (event) { stereoViewerClose(event); };
-    document.body.onorientationchange = function (event) { stereoDrawImage(); };
+    document.body.onorientationchange = function () { stereoDrawImage(); };
 
     document.getElementById("stereoControls").style.zIndex = 999991;
 
@@ -354,7 +354,7 @@ function stereoViewerOptionsOpen(value) {
     stereoOptVis = value;
 }
 
-function stereoHelpOpen(value) {
+function stereoHelpOpen() {
     var s;
     if (document.getElementById("stereoHelp").style.visibility === "hidden") {
         s = "visible";
@@ -366,7 +366,7 @@ function stereoHelpOpen(value) {
     document.getElementById("stereoAbout").style.visibility = "hidden";
 }
 
-function stereoAboutOpen(value) {
+function stereoAboutOpen() {
     var s;
     if (document.getElementById("stereoAbout").style.visibility === "hidden") {
         s = "visible";
@@ -472,7 +472,8 @@ function stereoDrawImage() {
         imw = 0,
         imh = 0,
         stereoMode_ = stereoMode,
-        stereoSwap_ = stereoSwap;
+        stereoSwap_ = stereoSwap,
+        imageData, x, y;
 
     function prepareWH2() {
         if ((cnvswidth - stereoNav * 2) / (cnvsheight - mc) >= img.width / img.height / 2) {
@@ -743,10 +744,15 @@ function stereoDrawImage() {
             ctx.fillText("Loading...", cnvswidth / 2, cnvsheight / 2);
         }
         else {
+
+            if (stereoMode_ === 1) {
+                stereoSwap_ = !stereoSwap_;
+            }
+
             switch (stereoMode_) {
 
-                case 1: // RL
-                    stereoSwap_ = !stereoSwap_;
+                //case 1: // RL
+                //    stereoSwap_ = !stereoSwap_;
                 case 0: // LR
                     prepareWH();
                     if (imagesT[imageN] === "stereoLR") {
@@ -1088,7 +1094,7 @@ function stereoCountImages() {
             n++;
         }
     }
-    imagesN = 0;
+    imageN = 0;
 }
 
 function stereoPrevImage() {
@@ -1114,7 +1120,7 @@ function stereoNextImage() {
     stereoDrawImage();
 }
 
-function stereoModeChange(value) {
+function stereoModeChange() {
     var elmnt = document.getElementById("modeselect");
     for (var i = 0; i <= stereoModes; i++) {
         if (elmnt.options[i].selected) {
@@ -1169,7 +1175,7 @@ function stereoKeyPress(e) {
         // Controls
         case 16:
         case 191:
-            stereoViewerHelpOpen();
+            stereoHelpOpen();
             break;
         case 27:
             stereoViewerClose();
