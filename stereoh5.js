@@ -40,12 +40,12 @@ var stereover = "1.5",
 
 function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     /*
-    Mode        - stereo mode (0..9...). Default: 5
-    Swap        - swap left and right sides (true, false). Default: false
-    BGColor        - backgroung color (0,1,2) for Black, Gray and White. Default: 0
-    Caption        - show captions (true, false). Default: true
-    CaptionSrc    - caption text source name ("alt", "title"). Default: "alt"
-    Type        - default stereo images type ("anaglyph", "flat", "stereoLR", "stereoRL", ""), for images with class="stereo". The value "" corresponds to "stereoRL"
+    Mode       - stereo mode (0..9...). Default: 5
+    Swap       - swap left and right sides (true, false). Default: false
+    BGColor    - backgroung color (0,1,2) for Black, Gray and White. Default: 0
+    Caption    - show captions (true, false). Default: true
+    CaptionSrc - caption text source name ("alt", "title"). Default: "alt"
+    Type       - default stereo images type ("anaglyph", "flat", "stereoLR", "stereoRL", ""), for images with class="stereo". The value "" corresponds to "stereoRL"
     */
 
     if (Caption) {
@@ -297,11 +297,14 @@ function setPixel(imageData, x, y, r, g, b, a) {
 }
 
 function stereoMouseClick(event) {
+    var mx = 0,
+        my = 0,
+        b = false,
+        cnvs = document.getElementById('stereoCanvas');
 
-    var mx = 0;
-    var my = 0;
-
-    if (!event) var event = window.event;
+    if (!event) {
+        event = window.event;
+    }
     if (event.pageX || event.pageY)    {
         mx = event.pageX;
         my = event.pageY;
@@ -311,8 +314,6 @@ function stereoMouseClick(event) {
         my = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
     }
 
-    var b = false;
-    var cnvs = document.getElementById('stereoCanvas');
     //if (stereoiOS) {
         if (mx < cnvs.width / 3) {  //left
             stereoPrevImage();
@@ -342,10 +343,11 @@ function stereoMouseClick(event) {
 }
 
 function stereoViewerOptionsOpen(value) {
+    var s;
     if (value)
-        var s = "visible"
+        s = "visible"
     else
-        var s = "hidden";
+        s = "hidden";
     document.getElementById("stereoControls").style.visibility = s;
     if (!value) {
         document.getElementById("stereoHelp").style.visibility = s;
@@ -355,29 +357,38 @@ function stereoViewerOptionsOpen(value) {
 }
 
 function stereoHelpOpen(value) {
+    var s;
     if (document.getElementById("stereoHelp").style.visibility == "hidden")
-        var s = "visible"
+        s = "visible"
     else
-        var s = "hidden";
+        s = "hidden";
     document.getElementById("stereoHelp").style.visibility = s;
     document.getElementById("stereoAbout").style.visibility = "hidden";
 }
 
 function stereoAboutOpen(value) {
+    var s;
     if (document.getElementById("stereoAbout").style.visibility == "hidden")
-        var s = "visible"
+        s = "visible"
     else
-        var s = "hidden";
+        s = "hidden";
     document.getElementById("stereoAbout").style.visibility = s;
     document.getElementById("stereoHelp").style.visibility = "hidden";
 }
 
 function stereoDrawControls(event) {
+    var mx = 0,
+        my = 0,
+        cnvs,
+        ctx,
+        color1,
+        color2,
+        color11,
+        color22;
 
-    var mx = 0;
-    var my = 0;
-
-    if (!event) var event = window.event;
+    if (!event) {
+        event = window.event;
+    }
     if (event.pageX || event.pageY)    {
         mx = event.pageX;
         my = event.pageY;
@@ -412,27 +423,27 @@ function stereoDrawControls(event) {
     }
 
     if (stereoNav > 0) {
-        var cnvs = document.getElementById('stereoCanvas');
-        var ctx = cnvs.getContext('2d');
+        cnvs = document.getElementById('stereoCanvas');
+        ctx = cnvs.getContext('2d');
 
         switch (stereoBGcolor) {
             case 0:
-                var color1 = "rgba(60, 60, 60, 1.0)";
-                var color2 = "rgba(30, 30, 30, 1.0)";
-                var color11 = "rgba(30, 30, 30, 1.0)";
-                var color22 = "rgba(0, 0, 0, 1.0)";
+                color1 = "rgba(60, 60, 60, 1.0)";
+                color2 = "rgba(30, 30, 30, 1.0)";
+                color11 = "rgba(30, 30, 30, 1.0)";
+                color22 = "rgba(0, 0, 0, 1.0)";
                 break;
             case 1:
-                var color1 = "rgba(190, 190, 190, 1.0)";
-                var color2 = "rgba(160, 160, 160, 1.0)";
-                var color11 = "rgba(160, 160, 160, 1.0)";
-                var color22 = "rgba(130, 130, 130, 1.0)";
+                color1 = "rgba(190, 190, 190, 1.0)";
+                color2 = "rgba(160, 160, 160, 1.0)";
+                color11 = "rgba(160, 160, 160, 1.0)";
+                color22 = "rgba(130, 130, 130, 1.0)";
                 break;
             case 2:
-                var color1 = "rgba(240, 240, 240, 1.0)";
-                var color2 = "rgba(220, 220, 220, 1.0)";
-                var color11 = "rgba(255, 255, 255, 1.0)";
-                var color22 = "rgba(240, 240, 240, 1.0)";
+                color1 = "rgba(240, 240, 240, 1.0)";
+                color2 = "rgba(220, 220, 220, 1.0)";
+                color11 = "rgba(255, 255, 255, 1.0)";
+                color22 = "rgba(240, 240, 240, 1.0)";
         }
 
         if ((mx >= 0) && (mx < stereoNav) && (my >= 0) && (my < cnvs.height)) {  //left
@@ -457,17 +468,11 @@ function stereoDrawControls(event) {
 }
 
 function stereoDrawImage() {
-
-    if (stereoCaption) // caption height
-        var mc = 30
-    else
-        var mc = 0;
-
-    var imw = 0;
-    var imh = 0;
-
-    var stereoMode_ = stereoMode;
-    var stereoSwap_ = stereoSwap;
+    var mc = stereoCaption ? 30 : 0, // caption height
+        imw = 0,
+        imh = 0,
+        stereoMode_ = stereoMode,
+        stereoSwap_ = stereoSwap;
 
     function prepareWH2() {
         if (((cnvswidth - stereoNav * 2) / (cnvsheight - mc)) >= (img.width / img.height / 2)) {
@@ -521,12 +526,12 @@ function stereoDrawImage() {
         imh = Math.round(imh);
     }
 
-    var cnvs = document.getElementById('stereoCanvas');
-    var ctx = cnvs.getContext('2d');
+    var cnvs = document.getElementById('stereoCanvas'),
+        ctx = cnvs.getContext('2d'),
+        cnvsheight = document.getElementById("stereoViewer").clientHeight,
+        cnvswidth = document.getElementById("stereoViewer").clientWidth,
+        elmnt = document.getElementById("stereoCanvasdiv");
 
-    var cnvsheight = document.getElementById("stereoViewer").clientHeight;
-    var cnvswidth = document.getElementById("stereoViewer").clientWidth;
-    var elmnt = document.getElementById("stereoCanvasdiv");
     //if (elmnt.height != cnvsheight)
         elmnt.height = cnvsheight;
     //if (elmnt.width != cnvswidth)
@@ -555,14 +560,14 @@ function stereoDrawImage() {
     document.getElementById("stereoViewer").style.backgroundColor = ctx.fillStyle;
 
     if (images.length > 0) {
-        var buf, bufctx, iData1, iData2, idr, idg, idb;
-        var r = new Number, g = new Number, b = new Number;
-        var index = 0;
-        var index1 = 0;
-        var index2 = 0;
-        var index1_ = 0;
-        var index2_ = 0;
-        var indexy = 0;
+        var buf, bufctx, iData1, iData2, idr, idg, idb,
+            r, g, b,
+            index = 0,
+            index1 = 0,
+            index2 = 0,
+            index1_ = 0,
+            index2_ = 0,
+            indexy = 0;
 
         function prepareAnaglyphData(inter) {
             buf = document.createElement('canvas');
@@ -609,10 +614,10 @@ function stereoDrawImage() {
         function _getLines(phrase, maxPxLength) {
             var phraseArray = [];
             if (phrase != null) {
-                var wa = phrase.split(" ");
-                var lastPhrase = "";
-                var l = maxPxLength;
-                var measure = 0;
+                var wa = phrase.split(" "),
+                    lastPhrase = "",
+                    l = maxPxLength,
+                    measure = 0;
                 for (var i=0; i < wa.length; i++) {
                     var w = wa[i];
                     measure = ctx.measureText(lastPhrase + w).width;
@@ -1157,10 +1162,9 @@ function stereoKeyPress(e) {
 }
 
 function stereoSaveAs() {
-    var canvas = document.getElementById("canvas");
-    var f = canvas.mozGetAsFile("stereo.png");
-
-    var newImg = document.createElement("img");
+    var canvas = document.getElementById("canvas"),
+        f = canvas.mozGetAsFile("stereo.png"),
+        newImg = document.createElement("img");
     newImg.src = f.toDataURL();
     document.body.appendChild(newImg);
 }
