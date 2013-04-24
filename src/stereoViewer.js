@@ -1,7 +1,7 @@
-/*! HTML5 Stereo Viewer v2.0.0-dev | https://github.com/wjbryant/HTML5-Stereo-Viewer
-Copyright (c) 2013 Yury Golubinsky, Bill Bryant | http://creativecommons.org/licenses/by/3.0/ */
+/*! stereoViewer v2.0.0-dev | https://github.com/wjbryant/HTML5-Stereo-Viewer
+Copyright (c) 2013 Yury Golubinsky | http://creativecommons.org/licenses/by/3.0/ */
 
-var stereover = "2.0.0-dev",
+var stereover = '2.0.0-dev',
     images = [],
     imagesT = [],
     imagesC = [],
@@ -14,14 +14,14 @@ var stereover = "2.0.0-dev",
     stereoOptVis = false,
     stereoSwap = false,
     stereoCaption = true,
-    stereoCaptionSrc = "alt",
-    stereoDefType = "stereoRL",
+    stereoCaptionSrc = 'alt',
+    stereoDefType = 'stereoRL',
     stereoiOS = false,
     stereoiOS_iPad = false,
     stereoiOS_iPhone = false,
     stereoIE = false,
-    stereourl = "http://urixblog.com/html5-stereo-viewer",
-    stereourlvis = "http://urixblog.com/...",
+    stereourl = 'http://urixblog.com/html5-stereo-viewer',
+    stereourlvis = 'http://urixblog.com/...',
     stereoModes = 11,
     stereoGlasses = 0,
     sGlassesRedCyan = 0,
@@ -33,8 +33,8 @@ var stereover = "2.0.0-dev",
  * Swap       - swap left and right sides (true, false). Default: false
  * BGColor    - backgroung color (0,1,2) for Black, Gray and White. Default: 0
  * Caption    - show captions (true, false). Default: true
- * CaptionSrc - caption text source name ("alt", "title"). Default: "alt"
- * Type       - default stereo images type ("anaglyph", "flat", "stereoLR", "stereoRL", ""), for images with class="stereo". The value "" corresponds to "stereoRL"
+ * CaptionSrc - caption text source name ('alt', 'title'). Default: 'alt'
+ * Type       - default stereo images type ('anaglyph', 'flat', 'stereoLR', 'stereoRL', ''), for images with class="stereo". The value '' corresponds to 'stereoRL'
  */
 function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     var i;
@@ -42,10 +42,10 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     if (Caption) {
         stereoCaption = Caption;
     }
-    if (CaptionSrc !== "") {
+    if (CaptionSrc !== '') {
         stereoCaptionSrc = CaptionSrc;
     }
-    if (Type !== "") {
+    if (Type !== '') {
         stereoDefType = Type;
     }
     if (Mode && Mode >= 0 && Mode <= stereoModes) {
@@ -55,8 +55,8 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
         stereoSwap = Swap;
     }
 
-    stereoiOS_iPhone = (navigator.appVersion.indexOf("iPhone") !== -1) || (navigator.appVersion.indexOf("iPod") !== -1);
-    stereoiOS_iPad = (navigator.appVersion.indexOf("iPad") !== -1);
+    stereoiOS_iPhone = (navigator.appVersion.indexOf('iPhone') !== -1) || (navigator.appVersion.indexOf('iPod') !== -1);
+    stereoiOS_iPad = (navigator.appVersion.indexOf('iPad') !== -1);
     stereoiOS = stereoiOS_iPad || stereoiOS_iPhone;
 
     if (stereoiOS) {
@@ -65,20 +65,20 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
 
     stereoIE = (/MSIE (\d+\.\d+);/.test(navigator.userAgent));
 
-    if (document.getElementById("stereoViewer")) {
-        document.body.insertBefore(document.getElementById("stereoViewer"), document.body.firstChild);
-        document.body.removeChild(document.getElementById("stereoViewer"));
+    if (document.getElementById('stereoViewer')) {
+        document.body.insertBefore(document.getElementById('stereoViewer'), document.body.firstChild);
+        document.body.removeChild(document.getElementById('stereoViewer'));
     }
 
-    var div = document.createElement("div");
-    div.id = "stereoViewer";
-    div.style.position = "fixed";
+    var div = document.createElement('div');
+    div.id = 'stereoViewer';
+    div.style.position = 'fixed';
     div.style.zIndex = 999990;
     div.style.top = 0;
     div.style.left = 0;
-    div.style.backgroundColor = "#000";
-    div.style.visibility = "visible";
-    div.style.fontFamily = "arial,verdana,helvetica";
+    div.style.backgroundColor = '#000';
+    div.style.visibility = 'visible';
+    div.style.fontFamily = 'arial,verdana,helvetica';
 
     div.innerHTML =
         '<div id="stereoCanvasdiv" style="" onmouseover="stereoDrawControls(event)" onmousemove="stereoDrawControls(event);" onmouseout="stereoDrawControls(event);" onmouse="stereoDrawControls(event);" onclick="stereoMouseClick(event);" ondblclick="if (stereoiOS) stereoViewerOptionsOpen(!stereoOptVis);" >' +
@@ -159,7 +159,7 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     document.body.insertBefore(div, document.body.firstChild);
 
     if (stereoiOS && !stereoiOS_iPad) {
-        document.getElementById("stereoControls").innerHTML =
+        document.getElementById('stereoControls').innerHTML =
             '<center><input type="button" value="Hide Options" onclick="stereoViewerOptionsOpen(false);" />' +
             '<input type="button" value="Close Viewer" onclick="stereoViewerClose();" /></center>' +
             '<hr />' +
@@ -205,20 +205,20 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     document.body.onscroll = function (event) { stereoViewerClose(event); };
     document.body.onorientationchange = function () { stereoDrawImage(); };
 
-    document.getElementById("stereoControls").style.zIndex = 999991;
+    document.getElementById('stereoControls').style.zIndex = 999991;
 
-    document.getElementById("stereoHelp").style.zIndex = 999992;
+    document.getElementById('stereoHelp').style.zIndex = 999992;
 
-    document.getElementById("stereoAbout").style.zIndex = 999992;
+    document.getElementById('stereoAbout').style.zIndex = 999992;
 
-    document.getElementById("stereoCanvas").width = document.documentElement.clientWidth;
-    document.getElementById("stereoCanvas").height = document.documentElement.clientHeight;
+    document.getElementById('stereoCanvas').width = document.documentElement.clientWidth;
+    document.getElementById('stereoCanvas').height = document.documentElement.clientHeight;
 
-    document.getElementById("stereoViewer").style.bottom = 0;
-    document.getElementById("stereoViewer").style.right = 0;
-    //document.getElementById("stereoViewer").style.visibility = "visible";
+    document.getElementById('stereoViewer').style.bottom = 0;
+    document.getElementById('stereoViewer').style.right = 0;
+    //document.getElementById('stereoViewer').style.visibility = 'visible';
 
-    document.getElementById("stereoNav").checked = stereoNav !== 0;
+    document.getElementById('stereoNav').checked = stereoNav !== 0;
 
     stereoCheckCookie();
     var sm = stereoGetCookie();
@@ -229,32 +229,32 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
     }
 
     for (i = 0; i <= stereoModes; i++) {
-        document.getElementById("modeselect").options[i].selected = stereoMode === i;
+        document.getElementById('modeselect').options[i].selected = stereoMode === i;
     }
 
-    for (i = 0; i < document.getElementById("stereoGlasses").options.length; i++) {
-        document.getElementById("stereoGlasses").options[i].selected = stereoGlasses === i;
+    for (i = 0; i < document.getElementById('stereoGlasses').options.length; i++) {
+        document.getElementById('stereoGlasses').options[i].selected = stereoGlasses === i;
     }
 
     stereoCorrectAfterMode();
 
-    document.getElementById("stereoSwap").checked = stereoSwap;
-    document.getElementById("stereoCap").checked = stereoCaption;
+    document.getElementById('stereoSwap').checked = stereoSwap;
+    document.getElementById('stereoCap').checked = stereoCaption;
 
     if (stereoiOS) {
-        var meta = document.createElement("meta");
-        meta.name = "viewport";
-        meta.content = "width = device-width; initial-scale = 1.0; user-scalable = no; maximum-scale=1.0; minimum-scale=1.0; target-densityDpi=device-dpi;";
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width = device-width; initial-scale = 1.0; user-scalable = no; maximum-scale=1.0; minimum-scale=1.0; target-densityDpi=device-dpi;';
         var b = false;
-        for (i = 0; i < document.getElementsByTagName("head")[0].childNodes.length; i++) {
-            if (document.getElementsByTagName("head")[0].childNodes[i].name === "viewport") {
-                document.getElementsByTagName("head")[0].replaceChild(meta, document.getElementsByTagName("head")[0].childNodes[i]);
+        for (i = 0; i < document.getElementsByTagName('head')[0].childNodes.length; i++) {
+            if (document.getElementsByTagName('head')[0].childNodes[i].name === 'viewport') {
+                document.getElementsByTagName('head')[0].replaceChild(meta, document.getElementsByTagName('head')[0].childNodes[i]);
                 b = true;
                 break;
             }
         }
         if (!b) {
-            document.getElementsByTagName("head")[0].appendChild(meta);
+            document.getElementsByTagName('head')[0].appendChild(meta);
         }
     }
 
@@ -270,15 +270,15 @@ function stereoViewerOpen(Mode, Swap, BGColor, Caption, CaptionSrc, Type) {
 
 function stereoViewerClose() {
     stereoViewerOptionsOpen(false);
-    document.body.removeChild(document.getElementById("stereoViewer"));
+    document.body.removeChild(document.getElementById('stereoViewer'));
 
     if (stereoiOS) {
-        var meta = document.createElement("meta");
-        meta.name = "viewport";
-        meta.content = "width = device-width; initial-scale = 1.0; user-scalable = yes;";
-        for (var i = 0; i < document.getElementsByTagName("head")[0].childNodes.length; i++) {
-            if (document.getElementsByTagName("head")[0].childNodes[i].name === "viewport") {
-                document.getElementsByTagName("head")[0].replaceChild(meta, document.getElementsByTagName("head")[0].childNodes[i]);
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width = device-width; initial-scale = 1.0; user-scalable = yes;';
+        for (var i = 0; i < document.getElementsByTagName('head')[0].childNodes.length; i++) {
+            if (document.getElementsByTagName('head')[0].childNodes[i].name === 'viewport') {
+                document.getElementsByTagName('head')[0].replaceChild(meta, document.getElementsByTagName('head')[0].childNodes[i]);
                 break;
             }
         }
@@ -342,13 +342,13 @@ function stereoMouseClick(event) {
 }
 
 function stereoViewerOptionsOpen(value) {
-    var s = value ? "visible" : "hidden";
+    var s = value ? 'visible' : 'hidden';
 
-    document.getElementById("stereoControls").style.visibility = s;
+    document.getElementById('stereoControls').style.visibility = s;
 
     if (!value) {
-        document.getElementById("stereoHelp").style.visibility = s;
-        document.getElementById("stereoAbout").style.visibility = s;
+        document.getElementById('stereoHelp').style.visibility = s;
+        document.getElementById('stereoAbout').style.visibility = s;
     }
 
     stereoOptVis = value;
@@ -356,26 +356,26 @@ function stereoViewerOptionsOpen(value) {
 
 function stereoHelpOpen() {
     var s;
-    if (document.getElementById("stereoHelp").style.visibility === "hidden") {
-        s = "visible";
+    if (document.getElementById('stereoHelp').style.visibility === 'hidden') {
+        s = 'visible';
     }
     else {
-        s = "hidden";
+        s = 'hidden';
     }
-    document.getElementById("stereoHelp").style.visibility = s;
-    document.getElementById("stereoAbout").style.visibility = "hidden";
+    document.getElementById('stereoHelp').style.visibility = s;
+    document.getElementById('stereoAbout').style.visibility = 'hidden';
 }
 
 function stereoAboutOpen() {
     var s;
-    if (document.getElementById("stereoAbout").style.visibility === "hidden") {
-        s = "visible";
+    if (document.getElementById('stereoAbout').style.visibility === 'hidden') {
+        s = 'visible';
     }
     else {
-        s = "hidden";
+        s = 'hidden';
     }
-    document.getElementById("stereoAbout").style.visibility = s;
-    document.getElementById("stereoHelp").style.visibility = "hidden";
+    document.getElementById('stereoAbout').style.visibility = s;
+    document.getElementById('stereoHelp').style.visibility = 'hidden';
 }
 
 function stereoDrawControls(event) {
@@ -430,22 +430,22 @@ function stereoDrawControls(event) {
 
         switch (stereoBGcolor) {
             case 0:
-                color1 = "rgba(60, 60, 60, 1.0)";
-                color2 = "rgba(30, 30, 30, 1.0)";
-                color11 = "rgba(30, 30, 30, 1.0)";
-                color22 = "rgba(0, 0, 0, 1.0)";
+                color1 = 'rgba(60, 60, 60, 1.0)';
+                color2 = 'rgba(30, 30, 30, 1.0)';
+                color11 = 'rgba(30, 30, 30, 1.0)';
+                color22 = 'rgba(0, 0, 0, 1.0)';
                 break;
             case 1:
-                color1 = "rgba(190, 190, 190, 1.0)";
-                color2 = "rgba(160, 160, 160, 1.0)";
-                color11 = "rgba(160, 160, 160, 1.0)";
-                color22 = "rgba(130, 130, 130, 1.0)";
+                color1 = 'rgba(190, 190, 190, 1.0)';
+                color2 = 'rgba(160, 160, 160, 1.0)';
+                color11 = 'rgba(160, 160, 160, 1.0)';
+                color22 = 'rgba(130, 130, 130, 1.0)';
                 break;
             case 2:
-                color1 = "rgba(240, 240, 240, 1.0)";
-                color2 = "rgba(220, 220, 220, 1.0)";
-                color11 = "rgba(255, 255, 255, 1.0)";
-                color22 = "rgba(240, 240, 240, 1.0)";
+                color1 = 'rgba(240, 240, 240, 1.0)';
+                color2 = 'rgba(220, 220, 220, 1.0)';
+                color11 = 'rgba(255, 255, 255, 1.0)';
+                color22 = 'rgba(240, 240, 240, 1.0)';
         }
 
         if (mx >= 0 && mx < stereoNav && my >= 0 && my < cnvs.height) { // left
@@ -529,9 +529,9 @@ function stereoDrawImage() {
 
     var cnvs = document.getElementById('stereoCanvas'),
         ctx = cnvs.getContext('2d'),
-        cnvsheight = document.getElementById("stereoViewer").clientHeight,
-        cnvswidth = document.getElementById("stereoViewer").clientWidth,
-        elmnt = document.getElementById("stereoCanvasdiv");
+        cnvsheight = document.getElementById('stereoViewer').clientHeight,
+        cnvswidth = document.getElementById('stereoViewer').clientWidth,
+        elmnt = document.getElementById('stereoCanvasdiv');
 
     //if (elmnt.height !== cnvsheight) {
         elmnt.height = cnvsheight;
@@ -540,7 +540,7 @@ function stereoDrawImage() {
         elmnt.width = cnvswidth;
     //}
 
-    elmnt = document.getElementById("stereoCanvas");
+    elmnt = document.getElementById('stereoCanvas');
 
     //if (elmnt.height !== cnvsheight) {
         elmnt.height = cnvsheight;
@@ -555,16 +555,16 @@ function stereoDrawImage() {
 
     switch (stereoBGcolor) {
         case 0:
-            ctx.fillStyle = "rgba(0, 0, 0, 1)";
+            ctx.fillStyle = 'rgba(0, 0, 0, 1)';
             break;
         case 1:
-            ctx.fillStyle = "rgba(128, 128, 128, 1)";
+            ctx.fillStyle = 'rgba(128, 128, 128, 1)';
             break;
         case 2:
-            ctx.fillStyle = "rgba(255, 255, 255, 1)";
+            ctx.fillStyle = 'rgba(255, 255, 255, 1)';
     }
     ctx.fillRect(stereoNav, 0, cnvswidth - stereoNav * 2, cnvsheight);
-    document.getElementById("stereoViewer").style.backgroundColor = ctx.fillStyle;
+    document.getElementById('stereoViewer').style.backgroundColor = ctx.fillStyle;
 
     function prepareAnaglyphData(inter) {
         buf = document.createElement('canvas');
@@ -583,7 +583,7 @@ function stereoDrawImage() {
             imageData = ctx.createImageData(imw * 2, imh);
         }
 
-        if (imagesT[imageN] === "stereoLR") {
+        if (imagesT[imageN] === 'stereoLR') {
             stereoSwap_ = !stereoSwap_;
         }
 
@@ -616,15 +616,17 @@ function stereoDrawImage() {
     function _getLines(phrase, maxPxLength) {
         var phraseArray = [];
         if (phrase) {
-            var wa = phrase.split(" "),
-                lastPhrase = "",
+            var wa = phrase.split(' '),
+                lastPhrase = '',
                 l = maxPxLength,
-                measure = 0;
-            for (var i=0; i < wa.length; i++) {
-                var w = wa[i];
+                measure = 0,
+                i, w;
+
+            for (i = 0; i < wa.length; i++) {
+                w = wa[i];
                 measure = ctx.measureText(lastPhrase + w).width;
                 if (measure < l) {
-                    lastPhrase += (" "+w);
+                    lastPhrase += (' '+w);
                 }
                 else {
                     phraseArray.push(lastPhrase);
@@ -641,22 +643,22 @@ function stereoDrawImage() {
     }
 
     function _drawText(num) {
-        var i, s;
+        var i, s, h;
         if (stereoCaption) {
-            ctx.font = "bold 12px sans-serif";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
             switch (stereoBGcolor) {
                 case 0:
-                    ctx.fillStyle = "rgba(128, 128, 128, 1)";
+                    ctx.fillStyle = 'rgba(128, 128, 128, 1)';
                     break;
                 case 1:
-                    ctx.fillStyle = "rgba(255, 255, 255, 1)";
+                    ctx.fillStyle = 'rgba(255, 255, 255, 1)';
                     break;
                 case 2:
-                    ctx.fillStyle = "rgba(128, 128, 128, 1)";
+                    ctx.fillStyle = 'rgba(128, 128, 128, 1)';
             }
-            var h = ctx.measureText("Wg").width;
+            h = ctx.measureText('Wg').width;
             if (num === 1) {
                 s = _getLines(imagesC[imageN], cnvswidth - 36);
                 for (i = 0; i < s.length; i++) {
@@ -684,64 +686,63 @@ function stereoDrawImage() {
             indexy = 0;
 
         switch (imagesT[imageN]) {
-            case "flat":
-            case "anaglyph":
+            case 'flat':
+            case 'anaglyph':
                 stereoMode_ = 0;
                 stereoSwap_ = false;
                 break;
-            case "stereoRL":
-            case "stereoLR":
+            case 'stereoRL':
+            case 'stereoLR':
                 stereoMode_ = stereoMode;
                 stereoSwap_ = stereoSwap;
                 break;
         }
 
         if (stereoIE) {
-            ctx.font = "bold 12px sans-serif";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
             switch (stereoBGcolor) {
                 case 0:
-                    ctx.fillStyle = "rgba(255, 128, 128, 1)";
+                    ctx.fillStyle = 'rgba(255, 128, 128, 1)';
                     break;
                 case 1:
-                    ctx.fillStyle = "rgba(255, 192, 192, 1)";
+                    ctx.fillStyle = 'rgba(255, 192, 192, 1)';
                     break;
                 case 2:
-                    ctx.fillStyle = "rgba(255, 128, 128, 1)";
+                    ctx.fillStyle = 'rgba(255, 128, 128, 1)';
             }
-            ctx.fillText("Internet Explorer is not supported in this version", cnvswidth / 2, cnvsheight / 2);
+            ctx.fillText('Internet Explorer is not supported in this version', cnvswidth / 2, cnvsheight / 2);
             switch (stereoBGcolor) {
                 case 0:
-                    ctx.fillStyle = "rgba(128, 128, 128, 1)";
+                    ctx.fillStyle = 'rgba(128, 128, 128, 1)';
                     break;
                 case 1:
-                    ctx.fillStyle = "rgba(255, 255, 255, 1)";
+                    ctx.fillStyle = 'rgba(255, 255, 255, 1)';
                     break;
                 case 2:
-                    ctx.fillStyle = "rgba(128, 128, 128, 1)";
+                    ctx.fillStyle = 'rgba(128, 128, 128, 1)';
             }
-            var h = ctx.measureText("Wg").width;
-            ctx.fillText("Press Esc to close the slideshow", cnvswidth / 2, cnvsheight / 2 + h * 2);
-            ctx.fillText("Please use Safari, Chrome, Firefox or Opera", cnvswidth / 2, cnvsheight / 2 + h * 3);
+            var h = ctx.measureText('Wg').width;
+            ctx.fillText('Press Esc to close the slideshow', cnvswidth / 2, cnvsheight / 2 + h * 2);
+            ctx.fillText('Please use Safari, Chrome, Firefox or Opera', cnvswidth / 2, cnvsheight / 2 + h * 3);
         }
-        else
-        if (!img.complete) {
+        else if (!img.complete) {
             img.onload = stereoDrawImage;
-            ctx.font = "bold 12px sans-serif";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
             switch (stereoBGcolor) {
                 case 0:
-                    ctx.fillStyle = "rgba(128, 128, 128, 1)";
+                    ctx.fillStyle = 'rgba(128, 128, 128, 1)';
                     break;
                 case 1:
-                    ctx.fillStyle = "rgba(255, 255, 255, 1)";
+                    ctx.fillStyle = 'rgba(255, 255, 255, 1)';
                     break;
                 case 2:
-                    ctx.fillStyle = "rgba(128, 128, 128, 1)";
+                    ctx.fillStyle = 'rgba(128, 128, 128, 1)';
             }
-            ctx.fillText("Loading...", cnvswidth / 2, cnvsheight / 2);
+            ctx.fillText('Loading...', cnvswidth / 2, cnvsheight / 2);
         }
         else {
 
@@ -755,7 +756,7 @@ function stereoDrawImage() {
                 //    stereoSwap_ = !stereoSwap_;
                 case 0: // LR
                     prepareWH();
-                    if (imagesT[imageN] === "stereoLR") {
+                    if (imagesT[imageN] === 'stereoLR') {
                         stereoSwap_ = !stereoSwap_;
                     }
                     if (!stereoSwap_) {
@@ -767,7 +768,7 @@ function stereoDrawImage() {
                         ctx.drawImage(img, img.width / 2, 0, img.width / 2, img.height,
                             (cnvswidth - imw) / 2, (cnvsheight - mc - imh) / 2, imw / 2, imh);
                     }
-                    if (imagesT[imageN] === "flat" || imagesT[imageN] === "anaglyph") {
+                    if (imagesT[imageN] === 'flat' || imagesT[imageN] === 'anaglyph') {
                         _drawText(1);
                     }
                     else {
@@ -777,7 +778,7 @@ function stereoDrawImage() {
 
                 case 3: // only Left
                     prepareWH2();
-                    if (imagesT[imageN] === "stereoLR") {
+                    if (imagesT[imageN] === 'stereoLR') {
                         stereoSwap_ = !stereoSwap_;
                     }
                     if (!stereoSwap_) {
@@ -793,7 +794,7 @@ function stereoDrawImage() {
 
                 case 2: // only Right
                     prepareWH2();
-                    if (imagesT[imageN] === "stereoLR") {
+                    if (imagesT[imageN] === 'stereoLR') {
                         stereoSwap_ = !stereoSwap_;
                     }
                     if (!stereoSwap_) {
@@ -1042,20 +1043,20 @@ function stereoDrawImage() {
             } //switch
         }
     } else {
-        ctx.font = "bold 12px sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
         switch (stereoBGcolor) {
             case 0:
-                ctx.fillStyle = "rgba(128, 128, 128, 1)";
+                ctx.fillStyle = 'rgba(128, 128, 128, 1)';
                 break;
             case 1:
-                ctx.fillStyle = "rgba(255, 255, 255, 1)";
+                ctx.fillStyle = 'rgba(255, 255, 255, 1)';
                 break;
             case 2:
-                ctx.fillStyle = "rgba(128, 128, 128, 1)";
+                ctx.fillStyle = 'rgba(128, 128, 128, 1)';
         }
-        ctx.fillText("No stereo images", cnvswidth / 2, cnvsheight / 2);
+        ctx.fillText('No stereo images', cnvswidth / 2, cnvsheight / 2);
     }
     ///////////////////////////////////
     stereoDrawControls();
@@ -1064,7 +1065,7 @@ function stereoDrawImage() {
 function stereoCountImages() {
     function getClassName(obj, c) {
         if (obj.className) {
-            var arrList = obj.className.split(" ");
+            var arrList = obj.className.split(' ');
             for (var i = 0; i < arrList.length; i++) {
                 for (var j = 0; j < c.length; j++) {
                     if (arrList[i] === c[j]) {
@@ -1073,17 +1074,17 @@ function stereoCountImages() {
                 }
             }
         }
-        return "";
+        return '';
     }
 
     var j, n = 0;
     for (j = 0; j < document.images.length; j++) {
-        var cn = getClassName(document.images[j], ["anaglyph", "flat", "stereo", "stereoLR", "stereoRL"]);
-        if (cn !== "") {
+        var cn = getClassName(document.images[j], ['anaglyph', 'flat', 'stereo', 'stereoLR', 'stereoRL']);
+        if (cn !== '') {
             images[n] = document.images[j].src;
             imagesC[n] = document.images[j].getAttribute(stereoCaptionSrc);
             imagesT[n] = cn;
-            if (imagesT[n] === "stereo") {
+            if (imagesT[n] === 'stereo') {
                 imagesT[n] = stereoDefType;
             }
             if (n === 0) {
@@ -1121,15 +1122,15 @@ function stereoNextImage() {
 }
 
 function stereoModeChange() {
-    var elmnt = document.getElementById("modeselect");
+    var elmnt = document.getElementById('modeselect');
     for (var i = 0; i <= stereoModes; i++) {
         if (elmnt.options[i].selected) {
             stereoMode = i;
             break;
         }
     }
-    stereoSwap = document.getElementById("stereoSwap").checked;
-    stereoCaption = document.getElementById("stereoCap").checked;
+    stereoSwap = document.getElementById('stereoSwap').checked;
+    stereoCaption = document.getElementById('stereoCap').checked;
 
     stereoCorrectAfterMode();
 
@@ -1137,7 +1138,7 @@ function stereoModeChange() {
 }
 
 function stereoGlassesChange() {
-    var elmnt = document.getElementById("stereoGlasses");
+    var elmnt = document.getElementById('stereoGlasses');
     for (var i = 0; i < elmnt.options.length; i++) {
         if (elmnt.options[i].selected) {
             stereoGlasses = i;
@@ -1162,7 +1163,7 @@ function stereoKeyPress(e) {
     function _mode(value) {
         stereoMode = value;
         stereoDrawImage();
-        var elmnt = document.getElementById("modeselect");
+        var elmnt = document.getElementById('modeselect');
         for (var i = 0; i <= stereoModes; i++) {
             elmnt.options[i].selected = stereoMode === i;
         }
@@ -1180,8 +1181,8 @@ function stereoKeyPress(e) {
         case 27:
             stereoViewerClose();
             break;
-        case 83: //"s"
-            document.getElementById("stereoSwap").checked = !stereoSwap;
+        case 83: //'s'
+            document.getElementById('stereoSwap').checked = !stereoSwap;
             stereoModeChange(stereoMode);
             break;
         // Navigation
@@ -1211,16 +1212,16 @@ function stereoKeyPress(e) {
 }
 
 function stereoSaveAs() {
-    var canvas = document.getElementById("canvas"),
-        f = canvas.mozGetAsFile("stereo.png"),
-        newImg = document.createElement("img");
+    var canvas = document.getElementById('canvas'),
+        f = canvas.mozGetAsFile('stereo.png'),
+        newImg = document.createElement('img');
     newImg.src = f.toDataURL();
     document.body.appendChild(newImg);
 }
 
 function stereoBG(c) {
     stereoBGcolor = c;
-    if (document.getElementById("stereoNav").checked && !stereoiOS) {
+    if (document.getElementById('stereoNav').checked && !stereoiOS) {
         stereoNav = stereoNavDef;
     }
     else {
@@ -1244,32 +1245,32 @@ function stereoSaveDef() {
 
 function stereoCheckCookie() {
     var sm = stereoGetCookie();
-    if ((sm >= 0) && (sm <= stereoModes)) {
-        document.getElementById("stereoSaveDef").value = "Forget Defaults";
+    if (sm >= 0 && sm <= stereoModes) {
+        document.getElementById('stereoSaveDef').value = 'Forget Defaults';
     }
     else {
-        document.getElementById("stereoSaveDef").value = "Save as Default";
+        document.getElementById('stereoSaveDef').value = 'Save as Default';
     }
-    document.getElementById("stereoSwap").checked = stereoGetCookieSwap() > 0;
-    //document.getElementById("stereoGlasses").checked = stereoGetCookieGlasses();
+    document.getElementById('stereoSwap').checked = stereoGetCookieSwap() > 0;
+    //document.getElementById('stereoGlasses').checked = stereoGetCookieGlasses();
 }
 
 function stereoSetCookie(m, s, gm) {
-    document.cookie = "HTML5_STEREO_VIEWER=" + escape(m.toString()) + "; path=/";
-    document.cookie = "HTML5_STEREO_VIEWER_SWAP=" + escape(s.toString()) + "; path=/";
-    document.cookie = "HTML5_STEREO_VIEWER_GLASSES=" + escape(gm.toString()) + "; path=/";
+    document.cookie = 'HTML5_STEREO_VIEWER=' + escape(m.toString()) + '; path=/';
+    document.cookie = 'HTML5_STEREO_VIEWER_SWAP=' + escape(s.toString()) + '; path=/';
+    document.cookie = 'HTML5_STEREO_VIEWER_GLASSES=' + escape(gm.toString()) + '; path=/';
 }
 
 function stereoSetCookieForFirstTimeHelpDisplayed() {
-    document.cookie = "HTML5_STEREO_VIEWER_FIRST_TIME_HELP_DISPLAYED=YES" + "; path=/";
+    document.cookie = 'HTML5_STEREO_VIEWER_FIRST_TIME_HELP_DISPLAYED=YES' + '; path=/';
 }
 
 function stereoGetCookieForFirstTimeHelpDisplayed() {
     stereoFirstTimeHelpDisplayed = true;
-    var a = document.cookie.split(";");
+    var a = document.cookie.split(';');
     for (var i = 0; i < a.length; i++) {
-        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_FIRST_TIME_HELP_DISPLAYED") {
-            stereoFirstTimeHelpDisplayed = unescape(a[i].substr(a[i].indexOf("=")+1) !== "YES");
+        if (a[i].substr(0,a[i].indexOf('=')).trim() === 'HTML5_STEREO_VIEWER_FIRST_TIME_HELP_DISPLAYED') {
+            stereoFirstTimeHelpDisplayed = unescape(a[i].substr(a[i].indexOf('=')+1) !== 'YES');
             return stereoFirstTimeHelpDisplayed;
         }
     }
@@ -1277,39 +1278,39 @@ function stereoGetCookieForFirstTimeHelpDisplayed() {
 }
 
 function stereoGetCookie() {
-    var a = document.cookie.split(";");
+    var a = document.cookie.split(';');
     for (var i = 0; i < a.length; i++) {
-        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER") {
-            return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)), 10);
+        if (a[i].substr(0,a[i].indexOf('=')).trim() === 'HTML5_STEREO_VIEWER') {
+            return parseInt(unescape(a[i].substr(a[i].indexOf('=')+1)), 10);
         }
     }
     return -1;
 }
 
 function stereoGetCookieSwap() {
-    var a = document.cookie.split(";");
+    var a = document.cookie.split(';');
     for (var i = 0; i < a.length; i++) {
-        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_SWAP") {
-            return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)), 10);
+        if (a[i].substr(0,a[i].indexOf('=')).trim() === 'HTML5_STEREO_VIEWER_SWAP') {
+            return parseInt(unescape(a[i].substr(a[i].indexOf('=')+1)), 10);
         }
     }
     return false;
 }
 
 function stereoGetCookieGlasses() {
-    var a = document.cookie.split(";");
+    var a = document.cookie.split(';');
     for (var i = 0; i < a.length; i++) {
-        if (a[i].substr(0,a[i].indexOf("=")).trim() === "HTML5_STEREO_VIEWER_GLASSES") {
-            return parseInt(unescape(a[i].substr(a[i].indexOf("=")+1)), 10);
+        if (a[i].substr(0,a[i].indexOf('=')).trim() === 'HTML5_STEREO_VIEWER_GLASSES') {
+            return parseInt(unescape(a[i].substr(a[i].indexOf('=')+1)), 10);
         }
     }
     return false;
 }
 
 function stereoCorrectAfterMode() {
-    if ((stereoMode <= (stereoModes - 2)) && (stereoMode >= 4)) {
-        document.getElementById("stereoGlasses").style.visibility = "inherit";
+    if (stereoMode <= stereoModes - 2 && stereoMode >= 4) {
+        document.getElementById('stereoGlasses').style.visibility = 'inherit';
     } else {
-        document.getElementById("stereoGlasses").style.visibility = "hidden";
+        document.getElementById('stereoGlasses').style.visibility = 'hidden';
     }
 }
